@@ -174,10 +174,7 @@ export class StakeService {
 		return new TransactionPayload(
 			this.connection,
 			errorMap,
-			instructions,
-			payerKey,
-			signers,
-			addressLookupTableAccounts,
+			{ instructions, feePayer: payerKey, signers, addressLookupTableAccounts },
 			signTransaction,
 		);
 	}
