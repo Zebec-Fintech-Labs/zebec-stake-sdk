@@ -3,7 +3,7 @@ import { deriveLockupAddress } from "../../src/pda";
 import { getConnection, getWallets } from "../shared";
 
 describe("Fetch Lockup Info", () => {
-	const network = "devnet";
+	const network = "mainnet-beta";
 	const connection = getConnection(network);
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
@@ -13,8 +13,8 @@ describe("Fetch Lockup Info", () => {
 
 	describe("getLockupInfo()", () => {
 		it("fetch lockup information", async () => {
-			// const lockupName = "ZBCN Lockup";
-			const lockupName = "Lockup 002";
+			const lockupName = "ZBCN Lockup";
+			// const lockupName = "Lockup 002";
 			const lockup = deriveLockupAddress(lockupName, service.program.programId);
 			console.log("lockup address:", lockup.toString());
 			const info = await service.getLockupInfo(lockup);
