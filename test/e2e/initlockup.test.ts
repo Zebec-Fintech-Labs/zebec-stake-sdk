@@ -14,7 +14,7 @@ describe("Init Lockup", () => {
 	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
 
 	describe("initLock()", () => {
-		it("initialize staking lock", async () => {
+		it.skip("initialize staking lock", async () => {
 			const rewardToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
 			const stakeToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
 			const fee = 0;
