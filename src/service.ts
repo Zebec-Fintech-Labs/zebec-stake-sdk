@@ -1,7 +1,14 @@
 import assert from "assert";
 import { BigNumber } from "bignumber.js";
 
-import { Address, AnchorProvider, BN, Program, Provider, translateAddress } from "@coral-xyz/anchor";
+import {
+	Address,
+	AnchorProvider,
+	BN,
+	Program,
+	Provider,
+	translateAddress,
+} from "@coral-xyz/anchor";
 import {
 	AddressLookupTableAccount,
 	clusterApiUrl,
@@ -11,7 +18,10 @@ import {
 	Signer,
 	TransactionInstruction,
 } from "@solana/web3.js";
-import { bpsToPercent, percentToBps } from "@zebec-network/core-utils";
+import {
+	bpsToPercent,
+	percentToBps,
+} from "@zebec-network/core-utils";
 import {
 	getAssociatedTokenAddressSync,
 	getMintDecimals,
@@ -19,7 +29,10 @@ import {
 	TransactionPayload,
 } from "@zebec-network/solana-common";
 
-import { ZEBEC_STAKE_IDL_V1, ZebecStakeIdlV1 } from "./artifacts";
+import {
+	ZEBEC_STAKE_IDL_V1,
+	ZebecStakeIdlV1,
+} from "./artifacts";
 import { TEN_BIGNUM } from "./constants";
 import {
 	deriveLockupAddress,
@@ -28,9 +41,15 @@ import {
 	deriveStakeVaultAddress,
 	deriveUserNonceAddress,
 } from "./pda";
-import { createReadonlyProvider, ReadonlyProvider } from "./providers";
+import {
+	createReadonlyProvider,
+	ReadonlyProvider,
+} from "./providers";
 import { RateLimitedQueue } from "./rateLimitQueue";
-import { callWithEnhancedBackoff, chunkArray } from "./utils";
+import {
+	callWithEnhancedBackoff,
+	chunkArray,
+} from "./utils";
 
 type ProgramCreateFunction = (provider: ReadonlyProvider | AnchorProvider) => Program<ZebecStakeIdlV1>;
 
@@ -207,6 +226,22 @@ export class StakeService {
 			.instruction();
 	}
 
+	async getUpdateLockupInstruction(
+		updater: PublicKey,
+		lockup: PublicKey,
+		data: UpdateLockupInstructionData,
+	): Promise<TransactionInstruction> {
+		return this.program.methods.updateLockup({
+			durationMap: data.rewardSchemes,
+			fee: data.fee,
+			feeVault: data.feeVault,
+			minimumStake: data.minimumStake
+		}).accountsPartial({
+			updater,
+			lockup,
+		}).instruction();
+	}
+
 	async getStakeInstruction(
 		feePayer: PublicKey,
 		lockup: PublicKey,
@@ -315,6 +350,47 @@ export class StakeService {
 		);
 
 		return this._createPayload(creator, [instruction]);
+	}
+
+	async updateLockup(params: {
+		lockupName: string;
+		updater?: Address;
+		fee: Numeric;
+		feeVault: Address;
+		rewardSchemes: RewardScheme[];
+		minimumStake: Numeric;
+	}): Promise<TransactionPayload> {
+		const updater = params.updater ? translateAddress(params.updater) : this.provider.publicKey;
+
+		if (!updater) {
+			throw new Error("MissingArgument: Please provide either updater address or publicKey in provider");
+		}
+		const lockup = deriveLockupAddress(params.lockupName, this.programId);
+		const lockupInfo = await this.program.account.lockup.fetch(lockup, this.connection.commitment);
+		const stakeToken = lockupInfo.stakedToken.tokenAddress;
+
+		const feeVault = translateAddress(params.feeVault);
+		const stakeTokenDecimals = await getMintDecimals(this.connection, stakeToken);
+		const UNITS_PER_STAKE_TOKEN = TEN_BIGNUM.pow(stakeTokenDecimals);
+		
+		const fee = new BN(BigNumber(params.fee).times(UNITS_PER_STAKE_TOKEN).toFixed(0));
+		const minimumStake = new BN(BigNumber(params.minimumStake).times(UNITS_PER_STAKE_TOKEN).toFixed(0));
+		
+		const rewardSchemes = params.rewardSchemes.map<ParsedRewardScheme>((value) => {
+			return {
+				duration: new BN(value.duration),
+				reward: new BN(percentToBps(value.rewardRate)),
+			};
+		});
+		
+		const instruction = await this.getUpdateLockupInstruction(updater, lockup, {
+			fee,
+			feeVault,
+			minimumStake,
+			rewardSchemes
+		})
+
+		return this._createPayload(updater, [instruction]);
 	}
 
 	async stake(params: {
@@ -724,6 +800,13 @@ export type InitLockupInstructionData = {
 	fee: BN;
 	feeVault: PublicKey;
 	name: string;
+	minimumStake: BN;
+};
+
+export type UpdateLockupInstructionData = {
+	rewardSchemes: ParsedRewardScheme[];
+	fee: BN;
+	feeVault: PublicKey;
 	minimumStake: BN;
 };
 
