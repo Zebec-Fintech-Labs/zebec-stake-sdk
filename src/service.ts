@@ -16,11 +16,11 @@ import {
 	getAssociatedTokenAddressSync,
 	getMintDecimals,
 	SignTransactionFunction,
+	TEN_BIGNUM,
 	TransactionPayload,
 } from "@zebec-network/solana-common";
 
 import { ZEBEC_STAKE_IDL_V1, ZebecStakeIdlV1 } from "./artifacts";
-import { TEN_BIGNUM } from "./constants";
 import {
 	deriveLockupAddress,
 	deriveRewardVaultAddress,
