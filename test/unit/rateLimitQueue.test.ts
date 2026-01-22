@@ -203,7 +203,7 @@ describe("RateLimitedQueue", function () {
 			try {
 				await queue.add(createMockTask(1, 100, true));
 				assert.fail("Should have thrown an error");
-			} catch (error) {
+			} catch (error: any) {
 				assert(error.message.includes("Task 1 failed"));
 			}
 

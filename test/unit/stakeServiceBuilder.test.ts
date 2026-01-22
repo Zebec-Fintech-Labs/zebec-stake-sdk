@@ -17,7 +17,7 @@ describe("Stake service builder test", () => {
 			const service = new StakeServiceBuilder().setNetwork().setProvider().setProgram().build();
 
 			assert(service instanceof StakeService, "Service is not instance of StakeService");
-		} catch (error) {
+		} catch (error: any) {
 			// console.error("Error in stake service builder test:", error);
 			assert.fail("Failed to build stake service: " + error.message);
 		}
@@ -32,7 +32,7 @@ describe("Stake service builder test", () => {
 				.build();
 
 			assert(service instanceof StakeService, "Service is not instance of StakeService");
-		} catch (error) {
+		} catch (error: any) {
 			// console.error("Error in stake service builder test:", error);
 			assert.fail("Failed to build stake service: " + error.message);
 		}
@@ -47,7 +47,7 @@ describe("Stake service builder test", () => {
 				.build();
 
 			assert(service instanceof StakeService, "Service is not instance of StakeService");
-		} catch (error) {
+		} catch (error: any) {
 			// console.error("Error in stake service builder test:", error);
 			assert.fail("Failed to build stake service: " + error.message);
 		}
@@ -63,7 +63,7 @@ describe("Stake service builder test", () => {
 				.build();
 
 			assert.fail("Expected error not thrown");
-		} catch (error) {
+		} catch (error: any) {
 			assert(error instanceof Error, "Error is not instance of Error");
 			assert.strictEqual(error.message, "InvalidOperation: Network is set twice.");
 		}
@@ -79,7 +79,7 @@ describe("Stake service builder test", () => {
 				.build();
 
 			assert.fail("Expected error not thrown");
-		} catch (error) {
+		} catch (error: any) {
 			assert(error instanceof Error, "Error is not instance of Error");
 			assert.strictEqual(error.message, "InvalidOperation: Provider is set twice.");
 		}
@@ -95,7 +95,7 @@ describe("Stake service builder test", () => {
 				.build();
 
 			assert.fail("Expected error not thrown");
-		} catch (error) {
+		} catch (error: any) {
 			assert(error instanceof Error, "Error is not instance of Error");
 			assert.strictEqual(error.message, "InvalidOperation: Program is set twice.");
 		}
