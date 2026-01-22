@@ -14,55 +14,52 @@ describe("Init Lockup", () => {
 	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
 
 	describe("initLock()", () => {
-		it.skip("initialize staking lock", async () => {
+		it("initialize staking lock", async () => {
 			const rewardToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
 			const stakeToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
-			const fee = 0;
-			const feeVault = "AA8B8zv68QCT8pkJL9vd6nAG9MzopARH9xvY1CLgAQQQ";
-			const name = `Lockup_${Date.now()}`;
-			const rewardSchemes: RewardScheme[] = [
-				{
-					// duration: 2592000, // 30 days
-					duration: 30,
-					rewardRate: "8.00",
-				},
-				{
-					// duration: 7776000, // 90 days
-					duration: 90,
-					rewardRate: "12.00",
-				},
-				{
-					// duration: 10368000, // 120 days
-					duration: 120,
-					rewardRate: "15.00",
-				},
-			];
-			const minimumStake = 0.000001;
-
-			/** mainnet-beta */
-			// const rewardToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
-			// const stakeToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
 			// const fee = 0;
-			// const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
-			// const name = `ZBCN_Lockup_${Date.now()}`;
+			const feeVault = "AA8B8zv68QCT8pkJL9vd6nAG9MzopARH9xvY1CLgAQQQ";
+			// const name = `Lockup_003`;
 			// const rewardSchemes: RewardScheme[] = [
 			// 	{
-			// 		duration: 2592000, // 30 days
-			// 		// duration: 30,
-			// 		rewardRate: "8",
+			// 		// duration: 2592000, // 30 days
+			// 		duration: 30,
+			// 		rewardRate: "3.00",
 			// 	},
 			// 	{
-			// 		duration: 7776000, // 90 days
-			// 		// duration: 90,
-			// 		rewardRate: "12",
+			// 		// duration: 7776000, // 90 days
+			// 		duration: 90,
+			// 		rewardRate: "5.00",
 			// 	},
 			// 	{
-			// 		duration: 10368000, // 120 days
-			// 		// duration: 120,
-			// 		rewardRate: "15",
+			// 		// duration: 10368000, // 120 days
+			// 		duration: 120,
+			// 		rewardRate: "7.00",
 			// 	},
 			// ];
-			// const minimumStake = 0.1;
+			// const minimumStake = 0.000001;
+
+			/** mainnet-beta */
+			// const rewardToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU"; // ZBCN Token
+			// const stakeToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
+			const fee = 0;
+			// const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
+			const name = `Lockup_004`;
+			const rewardSchemes: RewardScheme[] = [
+				{
+					duration: 2592000, // 30 days
+					rewardRate: "3.00",
+				},
+				{
+					duration: 7776000, // 90 days
+					rewardRate: "5.00",
+				},
+				{
+					duration: 15552000, // 180 days
+					rewardRate: "7.00",
+				},
+			];
+			const minimumStake = 1;
 
 			const payload = await service.initLockup({
 				rewardToken,

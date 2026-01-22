@@ -35,7 +35,8 @@ describe("Stake", () => {
 	const network = "devnet";
 	const connection = getConnection(network, "confirmed");
 	const wallets = getWallets(network);
-	const wallet = wallets[2];
+	const wallet = wallets[0];
+	console.log("wallet:", wallet.publicKey.toString());
 	const provider = createAnchorProvider(connection, wallet, { commitment: "confirmed" });
 
 	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
