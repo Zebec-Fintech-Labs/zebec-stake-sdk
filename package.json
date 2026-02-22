@@ -1,37 +1,14 @@
 {
-  "name": "@zebec-network/zebec-stake-sdk",
-  "version": "1.2.1",
-  "description": "An SDK for zebec network stake solana program",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "author": "Zebec Network | Ashish Sapkota",
-  "license": "MIT",
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "solana",
-    "zebec",
-    "zebec network",
-    "stake",
-    "staking"
-  ],
-  "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "rimraf ./dist",
-    "format": "prettier --write .",
-    "start": "ts-node src/index.ts",
-    "test": "ts-mocha -p ./tsconfig.json -t 1000000000 test/**/*.test.ts",
-    "test:single": "ts-mocha -p ./tsconfig.json -t 1000000000"
-  },
   "dependencies": {
     "@coral-xyz/anchor": "^0.31.1",
     "@solana/web3.js": "^1.98.2",
     "@zebec-network/core-utils": "^1.1.1",
-    "@zebec-network/solana-common": "^2.3.0",
+    "@zebec-network/solana-common": "^2.3.1",
     "bignumber.js": "^9.3.1",
     "buffer": "^6.0.3"
   },
+  "description": "An SDK for zebec network stake solana program",
   "devDependencies": {
     "@types/bn.js": "^5.2.0",
     "@types/mocha": "^10.0.10",
@@ -43,5 +20,28 @@
     "ts-mocha": "^11.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
-  }
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "solana",
+    "zebec",
+    "zebec network",
+    "stake",
+    "staking"
+  ],
+  "license": "MIT",
+  "main": "dist/index.js",
+  "name": "@zebec-network/zebec-stake-sdk",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf ./dist",
+    "format": "npx @biomejs/biome format --write",
+    "start": "ts-node src/index.ts",
+    "test": "ts-mocha -p ./tsconfig.json -t 1000000000 test/**/*.test.ts",
+    "test:single": "ts-mocha -p ./tsconfig.json -t 1000000000"
+  },
+  "types": "dist/index.d.ts",
+  "version": "1.2.2"
 }

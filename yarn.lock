@@ -240,10 +240,10 @@
   dependencies:
     bignumber.js "^9.3.1"
 
-"@zebec-network/solana-common@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/@zebec-network/solana-common/-/solana-common-2.3.0.tgz#be2fbdefdcc94ffcc43b46d48a505bc136cedb68"
-  integrity sha512-9oZJfKKYHC1XwZ1QScAsN48amSgd0pYAdkaJfIHXjgD2TzrciOgsjRMImeqbDdmqkKHmwJyzkb3RagcEXID2tw==
+"@zebec-network/solana-common@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/@zebec-network/solana-common/-/solana-common-2.3.1.tgz#a2f65ca928f8fa437e31621ecb649c3ff736ed82"
+  integrity sha512-X4yRw46tcPytZS/v6dpC630yK1PTIiZIGCrEGOmz80tqAUPtqhQL3p94pjJnVhRScg3UmDHJMQMkqLacbfJq5w==
   dependencies:
     "@coral-xyz/anchor" "^0.31.1"
     bignumber.js "^9.3.1"
