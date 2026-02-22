@@ -1,15 +1,6 @@
-import {
-	createReadonlyProvider,
-	StakeServiceBuilder,
-} from '../../src';
-import {
-	deriveLockupAddress,
-	deriveStakeAddress,
-} from '../../src/pda';
-import {
-	getConnection,
-	getWallets,
-} from '../shared';
+import { createReadonlyProvider, StakeServiceBuilder } from "../../src";
+import { deriveLockupAddress, deriveStakeAddress } from "../../src/pda";
+import { getConnection, getWallets } from "../shared";
 
 describe("Fetch Stake Info", () => {
 	const network = "devnet";

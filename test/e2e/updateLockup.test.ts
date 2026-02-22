@@ -1,15 +1,12 @@
-import assert from 'assert';
+import assert from "assert";
 
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
 	type RewardScheme,
 	StakeServiceBuilder,
-} from '../../src';
-import {
-	getConnection,
-	getWallets,
-} from '../shared';
+} from "../../src";
+import { getConnection, getWallets } from "../shared";
 
 describe("Update Lockup", () => {
 	const network = "devnet";

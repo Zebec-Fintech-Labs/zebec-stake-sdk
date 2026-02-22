@@ -1,17 +1,8 @@
-import assert from 'node:assert';
+import assert from "node:assert";
 
-import {
-	createReadonlyProvider,
-	StakeServiceBuilder,
-} from '../../src';
-import {
-	deriveLockupAddress,
-	deriveUserNonceAddress,
-} from '../../src/pda';
-import {
-	getConnection,
-	getWallets,
-} from '../shared';
+import { createReadonlyProvider, StakeServiceBuilder } from "../../src";
+import { deriveLockupAddress, deriveUserNonceAddress } from "../../src/pda";
+import { getConnection, getWallets } from "../shared";
 
 describe("Fetch User Nonce Info", () => {
 	const network = "devnet";
