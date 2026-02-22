@@ -1,10 +1,13 @@
-import assert from "assert";
-
 import { PublicKey } from "@solana/web3.js";
 import { getAssociatedTokenAddressSync } from "@zebec-network/solana-common";
+import assert from "assert";
 
 import { createReadonlyProvider, StakeServiceBuilder } from "../../src";
-import { deriveLockupAddress, deriveRewardVaultAddress, deriveStakeVaultAddress } from "../../src/pda";
+import {
+	deriveLockupAddress,
+	deriveRewardVaultAddress,
+	deriveStakeVaultAddress,
+} from "../../src/pda";
 import { getConnection, getWallets } from "../shared";
 
 describe("Fetch Lockup Info", () => {
@@ -15,13 +18,17 @@ describe("Fetch Lockup Info", () => {
 	console.log("wallet:", wallet.publicKey.toString());
 	const provider = createReadonlyProvider(connection, wallet.publicKey);
 
-	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
+	const service = new StakeServiceBuilder()
+		.setNetwork(network)
+		.setProvider(provider)
+		.setProgram()
+		.build();
 
 	describe("getLockupInfo()", () => {
 		it("fetch lockup information", async () => {
-			// const lockupName = "ZBCN_Lockup_003";
+			const lockupName = "ZBCN_Lockup_003";
 			// const lockupName = "ZBCN_Lockup_002";
-			const lockupName = "Lockup_004"; // devnet
+			// const lockupName = "Lockup_004"; // devnet
 			const lockup = deriveLockupAddress(lockupName, service.program.programId);
 			console.log("lockup address:", lockup.toString());
 
@@ -38,10 +45,21 @@ describe("Fetch Lockup Info", () => {
 			const stakeToken = info.stakeToken.tokenAdress;
 			const rewardToken = info.rewardToken.tokenAddress;
 
-			const stakeVaultTokenAccount = getAssociatedTokenAddressSync(new PublicKey(stakeToken), stakeVault, true);
+			const stakeVaultTokenAccount = getAssociatedTokenAddressSync(
+				new PublicKey(stakeToken),
+				stakeVault,
+				true,
+			);
 			console.log("stakeVaultTokenAccount:", stakeVaultTokenAccount.toString());
-			const rewardVaultTokenAccount = getAssociatedTokenAddressSync(new PublicKey(rewardToken), rewardVault, true);
-			console.log("rewardVaultTokenAccount:", rewardVaultTokenAccount.toString());
+			const rewardVaultTokenAccount = getAssociatedTokenAddressSync(
+				new PublicKey(rewardToken),
+				rewardVault,
+				true,
+			);
+			console.log(
+				"rewardVaultTokenAccount:",
+				rewardVaultTokenAccount.toString(),
+			);
 
 			const feeVault = info.feeInfo.feeVault;
 			console.log("fee vault address:", feeVault);

@@ -17,13 +17,14 @@ describe("lookup table actions", () => {
 		// use about 0.003 SOL for two txs;
 
 		const slot = await connection.getSlot();
-		const [lookupTableInst, lookupTableAddress] = web3.AddressLookupTableProgram.createLookupTable({
-			authority: wallet.publicKey, // The authority (i.e., the account with permission to modify the lookup table)
+		const [lookupTableInst, lookupTableAddress] =
+			web3.AddressLookupTableProgram.createLookupTable({
+				authority: wallet.publicKey, // The authority (i.e., the account with permission to modify the lookup table)
 
-			payer: wallet.publicKey, // The payer (i.e., the account that will pay for the transaction fees)
+				payer: wallet.publicKey, // The payer (i.e., the account that will pay for the transaction fees)
 
-			recentSlot: slot - 1, // The recent slot to derive lookup table's address
-		});
+				recentSlot: slot - 1, // The recent slot to derive lookup table's address
+			});
 		console.log("lookup address:", lookupTableAddress.toString());
 		lookupTableAddressGlob = lookupTableAddress;
 
@@ -50,7 +51,9 @@ describe("lookup table actions", () => {
 	it.skip("extends address lookup table", async () => {
 		// const lookupTable = new web3.PublicKey("HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL");
 		// const lookupTable = new PublicKey("C4R2sL6yj7bzKfbdfwCfH68DZZ3QnzdmedE9wQqTfAAA"); // devnet
-		const lookupTable = new PublicKey("EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t"); // mainnet-beta
+		const lookupTable = new PublicKey(
+			"EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t",
+		); // mainnet-beta
 		// const lookupTable = lookupTableAddressGlob;
 
 		const addresses = [
@@ -119,7 +122,9 @@ describe("lookup table actions", () => {
 		const vtx = new web3.VersionedTransaction(mesage.compileToV0Message());
 		const signedVtx = await wallet.signTransaction(vtx);
 
-		const signature = await connection.sendRawTransaction(signedVtx.serialize());
+		const signature = await connection.sendRawTransaction(
+			signedVtx.serialize(),
+		);
 		console.log("signature", signature);
 		await connection.confirmTransaction(
 			{
@@ -132,12 +137,16 @@ describe("lookup table actions", () => {
 	});
 
 	it.only("list lookup table account addresses", async () => {
-		const lookupTable = new PublicKey("EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t");
+		const lookupTable = new PublicKey(
+			"EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t",
+		);
 
 		const lookupTables = await connection.getAddressLookupTable(lookupTable);
 		const lookupTableAccount = lookupTables.value!;
 		console.log("Lookup table address: [");
-		lookupTableAccount.state.addresses.map((a) => console.log("  ", a.toString()));
+		lookupTableAccount.state.addresses.map((a) =>
+			console.log("  ", a.toString()),
+		);
 		console.log("]");
 		console.log("authority", lookupTableAccount.state.authority?.toString());
 	});

@@ -9,7 +9,11 @@ describe("Fetch Stake Info", () => {
 	const wallet = wallets[2];
 	const provider = createReadonlyProvider(connection, wallet.publicKey);
 
-	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
+	const service = new StakeServiceBuilder()
+		.setNetwork(network)
+		.setProvider(provider)
+		.setProgram()
+		.build();
 
 	describe("getStakeInfo()", () => {
 		it("fetch stake information of a user", async () => {

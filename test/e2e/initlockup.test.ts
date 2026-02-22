@@ -1,6 +1,11 @@
 import assert from "assert";
 
-import { createAnchorProvider, deriveLockupAddress, RewardScheme, StakeServiceBuilder } from "../../src";
+import {
+	createAnchorProvider,
+	deriveLockupAddress,
+	RewardScheme,
+	StakeServiceBuilder,
+} from "../../src";
 import { getConnection, getWallets } from "../shared";
 
 describe("Init Lockup", () => {
@@ -9,9 +14,15 @@ describe("Init Lockup", () => {
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
 	console.log("\twallet:", wallet.publicKey.toString());
-	const provider = createAnchorProvider(connection, wallet, { commitment: "confirmed" });
+	const provider = createAnchorProvider(connection, wallet, {
+		commitment: "confirmed",
+	});
 
-	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
+	const service = new StakeServiceBuilder()
+		.setNetwork(network)
+		.setProvider(provider)
+		.setProgram()
+		.build();
 
 	describe("initLock()", () => {
 		it("initialize staking lock", async () => {
@@ -78,21 +89,43 @@ describe("Init Lockup", () => {
 				commitment: "confirmed",
 				maxSupportedTransactionVersion: 0,
 			});
-			assert(transaction, `Transaction does not exists for signature: ${signature}`);
+			assert(
+				transaction,
+				`Transaction does not exists for signature: ${signature}`,
+			);
 
 			const lockupAddress = deriveLockupAddress(name, service.programId);
 			const lockupInfo = await service.getLockupInfo(lockupAddress);
 
-			assert(lockupInfo, `Lockup Info does not exists for name: ${name}, lockup: ${lockupAddress.toString()}`);
-			assert.strictEqual(lockupInfo.address, lockupAddress.toString(), "Address does not match in lockup info");
-			assert.strictEqual(lockupInfo.feeInfo.fee, fee.toString(), "Fee does not match in lockup info");
-			assert.strictEqual(lockupInfo.feeInfo.feeVault, feeVault, "Fee does not match in lockup info");
+			assert(
+				lockupInfo,
+				`Lockup Info does not exists for name: ${name}, lockup: ${lockupAddress.toString()}`,
+			);
+			assert.strictEqual(
+				lockupInfo.address,
+				lockupAddress.toString(),
+				"Address does not match in lockup info",
+			);
+			assert.strictEqual(
+				lockupInfo.feeInfo.fee,
+				fee.toString(),
+				"Fee does not match in lockup info",
+			);
+			assert.strictEqual(
+				lockupInfo.feeInfo.feeVault,
+				feeVault,
+				"Fee does not match in lockup info",
+			);
 			assert.strictEqual(
 				lockupInfo.rewardToken.tokenAddress,
 				rewardToken,
 				"Reward Token does not match in lockup info",
 			);
-			assert.strictEqual(lockupInfo.stakeToken.tokenAdress, stakeToken, "Stake Token does not match in lockup info");
+			assert.strictEqual(
+				lockupInfo.stakeToken.tokenAdress,
+				stakeToken,
+				"Stake Token does not match in lockup info",
+			);
 			assert.strictEqual(
 				lockupInfo.stakeInfo.creator,
 				wallet.publicKey.toString(),
@@ -103,7 +136,11 @@ describe("Init Lockup", () => {
 				minimumStake.toString(),
 				"Minimum stake does not match in lockup info",
 			);
-			assert.strictEqual(lockupInfo.stakeInfo.name, name, "Name does not match in lockup info");
+			assert.strictEqual(
+				lockupInfo.stakeInfo.name,
+				name,
+				"Name does not match in lockup info",
+			);
 			assert.deepStrictEqual(
 				lockupInfo.stakeInfo.rewardSchemes,
 				rewardSchemes,

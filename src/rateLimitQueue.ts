@@ -18,7 +18,9 @@ export class RateLimitedQueue {
 					const now = Date.now();
 					const timeSinceLastRequest = now - this.lastRequestTime;
 					if (timeSinceLastRequest < this.minDelay) {
-						await new Promise((resolve) => setTimeout(resolve, this.minDelay - timeSinceLastRequest));
+						await new Promise((resolve) =>
+							setTimeout(resolve, this.minDelay - timeSinceLastRequest),
+						);
 					}
 
 					this.lastRequestTime = Date.now();

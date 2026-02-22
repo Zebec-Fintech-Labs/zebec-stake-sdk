@@ -1,5 +1,15 @@
-import { Address, AnchorProvider, translateAddress } from "@coral-xyz/anchor";
-import { ConfirmOptions, Connection, PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js";
+import {
+	type Address,
+	AnchorProvider,
+	translateAddress,
+} from "@coral-xyz/anchor";
+import type {
+	ConfirmOptions,
+	Connection,
+	PublicKey,
+	Transaction,
+	VersionedTransaction,
+} from "@solana/web3.js";
 
 export class ReadonlyProvider {
 	readonly connection: Connection;
@@ -7,11 +17,16 @@ export class ReadonlyProvider {
 
 	constructor(connection: Connection, walletAddress?: Address) {
 		this.connection = connection;
-		this.walletAddress = walletAddress ? translateAddress(walletAddress) : undefined;
+		this.walletAddress = walletAddress
+			? translateAddress(walletAddress)
+			: undefined;
 	}
 }
 
-export function createReadonlyProvider(connection: Connection, walletAddress?: Address): ReadonlyProvider {
+export function createReadonlyProvider(
+	connection: Connection,
+	walletAddress?: Address,
+): ReadonlyProvider {
 	return new ReadonlyProvider(connection, walletAddress);
 }
 
@@ -19,8 +34,12 @@ export function createReadonlyProvider(connection: Connection, walletAddress?: A
  * Wallet interface used by Anchor Framework
  */
 export interface AnchorWallet {
-	signTransaction: <T extends Transaction | VersionedTransaction>(tx: T) => Promise<T>;
-	signAllTransactions: <T extends Transaction | VersionedTransaction>(txs: T[]) => Promise<T[]>;
+	signTransaction: <T extends Transaction | VersionedTransaction>(
+		tx: T,
+	) => Promise<T>;
+	signAllTransactions: <T extends Transaction | VersionedTransaction>(
+		txs: T[],
+	) => Promise<T[]>;
 	publicKey: PublicKey;
 }
 

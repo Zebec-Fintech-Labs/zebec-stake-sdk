@@ -9,7 +9,11 @@ describe("Fetch All Stakes Info", () => {
 	const wallet = wallets[2];
 	const provider = createReadonlyProvider(connection, wallet.publicKey);
 
-	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
+	const service = new StakeServiceBuilder()
+		.setNetwork(network)
+		.setProvider(provider)
+		.setProgram()
+		.build();
 
 	describe("getAllStakeInfos()", () => {
 		it("fetch all stakes information of a user", async () => {
@@ -21,7 +25,10 @@ describe("Fetch All Stakes Info", () => {
 			// const staker = "7TRtTTBfG65LRxzFgRWFDdkcxjjryP6QLPFub3SuGbFu";
 			const staker = "6thrx413x1f1HXsN3y3WYBs8mxGWmSYCtxDf8w7DCp6L";
 			const start = Date.now();
-			const infos = await service.getAllStakesInfoOfUser(staker, lockup, { maxConcurrent: 4, minDelayMs: 100 });
+			const infos = await service.getAllStakesInfoOfUser(staker, lockup, {
+				maxConcurrent: 4,
+				minDelayMs: 100,
+			});
 			console.log("stake infos:", infos);
 			console.log("time elapsed: %d ms", Date.now() - start);
 		});

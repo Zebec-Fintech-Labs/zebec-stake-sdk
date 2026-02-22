@@ -11,19 +11,31 @@ describe("Fetch User Nonce Info", () => {
 	const wallet = wallets[2];
 	const provider = createReadonlyProvider(connection, wallet.publicKey);
 
-	const service = new StakeServiceBuilder().setNetwork(network).setProvider(provider).setProgram().build();
+	const service = new StakeServiceBuilder()
+		.setNetwork(network)
+		.setProvider(provider)
+		.setProgram()
+		.build();
 
 	describe("getUserNonceInfo()", () => {
 		it("fetch stake information of a user", async () => {
 			const lockupName = "Lockup 002";
 			const lockup = deriveLockupAddress(lockupName, service.program.programId);
-			const userNonce = deriveUserNonceAddress(wallet.publicKey, lockup, service.program.programId);
+			const userNonce = deriveUserNonceAddress(
+				wallet.publicKey,
+				lockup,
+				service.program.programId,
+			);
 			const info = await service.getUserNonceInfo(userNonce);
 
 			if (info) {
 				assert("address" in info);
 				assert("nonce" in info);
-				assert.strictEqual(userNonce.toString(), info.address, "UserNonceAddress does not match");
+				assert.strictEqual(
+					userNonce.toString(),
+					info.address,
+					"UserNonceAddress does not match",
+				);
 			}
 
 			console.log("user nonce info:", info);

@@ -5,7 +5,11 @@ import * as fs from "fs";
 import path from "path";
 
 import { Program } from "@coral-xyz/anchor";
-import { PublicKey, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
+import {
+	PublicKey,
+	TransactionMessage,
+	VersionedTransaction,
+} from "@solana/web3.js";
 
 import {
 	createAnchorProvider,
@@ -50,19 +54,34 @@ describe("Whitelisting Stakers", () => {
 
 	describe("prepareData", () => {
 		it("should prepare data for whitelist staker", async () => {
-			const file = fs.readFileSync(path.join(__dirname, "staking-data-05-25.json"), "utf-8");
+			const file = fs.readFileSync(
+				path.join(__dirname, "staking-data-05-25.json"),
+				"utf-8",
+			);
 			const data: RawStakeData[] = JSON.parse(file);
 			assert(Array.isArray(data));
 
-			const stakesMap: Map<string, StakeInfo[]> = new Map<string, StakeInfo[]>();
+			const stakesMap: Map<string, StakeInfo[]> = new Map<
+				string,
+				StakeInfo[]
+			>();
 
 			for (const datum of data) {
 				// Validate input data
 				assert(typeof datum.wallet === "string", "Wallet should be a string");
 				assert(typeof datum.amount === "number", "Amount should be a number");
-				assert(typeof datum.lockTime === "number", "Lock time should be a number");
-				assert(typeof datum.lockDuration === "number", "Lock duration should be a number");
-				assert(typeof datum.isRewardClaimed === "boolean", "isRewardClaimed should be a boolean");
+				assert(
+					typeof datum.lockTime === "number",
+					"Lock time should be a number",
+				);
+				assert(
+					typeof datum.lockDuration === "number",
+					"Lock duration should be a number",
+				);
+				assert(
+					typeof datum.isRewardClaimed === "boolean",
+					"isRewardClaimed should be a boolean",
+				);
 
 				const stakeInfo: StakeInfo = {
 					wallet: datum.wallet,
@@ -95,13 +114,20 @@ describe("Whitelisting Stakers", () => {
 				});
 			}
 
-			fs.writeFileSync(path.join(__dirname, "output.json"), JSON.stringify(allStakes, null, 2), "utf-8");
+			fs.writeFileSync(
+				path.join(__dirname, "output.json"),
+				JSON.stringify(allStakes, null, 2),
+				"utf-8",
+			);
 		});
 	});
 
 	describe("whitelistStakers", () => {
 		it("whitelist stakers", async () => {
-			const file = fs.readFileSync(path.join(__dirname, "output.json"), "utf-8");
+			const file = fs.readFileSync(
+				path.join(__dirname, "output.json"),
+				"utf-8",
+			);
 			const data = JSON.parse(file);
 			assert(Array.isArray(data));
 
@@ -138,8 +164,15 @@ describe("Whitelisting Stakers", () => {
 						// console.log("staker:", staker);
 						// console.log("nonce:", nonce);
 
-						const amountInUnits = BigNumber(amount).times(UNITS_PER_TOKEN).toFixed(0);
-						const stakePda = deriveStakeAddress(staker, lockup, BigInt(nonce), program.programId);
+						const amountInUnits = BigNumber(amount)
+							.times(UNITS_PER_TOKEN)
+							.toFixed(0);
+						const stakePda = deriveStakeAddress(
+							staker,
+							lockup,
+							BigInt(nonce),
+							program.programId,
+						);
 
 						return program.methods
 							.whitelistStaker({
@@ -166,8 +199,11 @@ describe("Whitelisting Stakers", () => {
 					payerKey: wallet.publicKey,
 				});
 
-				const lookupTable = new PublicKey("HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL");
-				const lookupTables = await connection.getAddressLookupTable(lookupTable);
+				const lookupTable = new PublicKey(
+					"HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL",
+				);
+				const lookupTables =
+					await connection.getAddressLookupTable(lookupTable);
 				const lookupTableAccount = lookupTables.value;
 				assert(lookupTableAccount, "Lookup table account not found");
 
@@ -182,7 +218,11 @@ describe("Whitelisting Stakers", () => {
 				});
 
 				await connection.confirmTransaction(
-					{ blockhash: lbh.blockhash, lastValidBlockHeight: lbh.lastValidBlockHeight, signature },
+					{
+						blockhash: lbh.blockhash,
+						lastValidBlockHeight: lbh.lastValidBlockHeight,
+						signature,
+					},
 					"confirmed",
 				);
 
@@ -210,7 +250,12 @@ describe("Whitelisting Stakers", () => {
 			const lockPeriodInSeconds = 30 * SECONDS_IN_A_DAY;
 
 			const amountInUnits = BigNumber(amount).times(UNITS_PER_TOKEN).toFixed(0);
-			const stakePda = deriveStakeAddress(staker, lockup, BigInt(nonce), program.programId);
+			const stakePda = deriveStakeAddress(
+				staker,
+				lockup,
+				BigInt(nonce),
+				program.programId,
+			);
 
 			const ix = await program.methods
 				.whitelistStaker({
@@ -235,7 +280,9 @@ describe("Whitelisting Stakers", () => {
 				payerKey: wallet.publicKey,
 			});
 
-			const lookupTable = new PublicKey("HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL");
+			const lookupTable = new PublicKey(
+				"HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL",
+			);
 			const lookupTables = await connection.getAddressLookupTable(lookupTable);
 			const lookupTableAccount = lookupTables.value;
 			assert(lookupTableAccount, "Lookup table account not found");
@@ -251,7 +298,11 @@ describe("Whitelisting Stakers", () => {
 			});
 
 			await connection.confirmTransaction(
-				{ blockhash: lbh.blockhash, lastValidBlockHeight: lbh.lastValidBlockHeight, signature },
+				{
+					blockhash: lbh.blockhash,
+					lastValidBlockHeight: lbh.lastValidBlockHeight,
+					signature,
+				},
 				"confirmed",
 			);
 

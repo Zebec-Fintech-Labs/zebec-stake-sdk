@@ -2,7 +2,14 @@ import assert from "assert";
 import dotenv from "dotenv";
 
 import { AnchorProvider, utils, Wallet } from "@coral-xyz/anchor";
-import { Cluster, Commitment, Connection, Keypair, Transaction, VersionedTransaction } from "@solana/web3.js";
+import {
+	Cluster,
+	Commitment,
+	Connection,
+	Keypair,
+	Transaction,
+	VersionedTransaction,
+} from "@solana/web3.js";
 
 dotenv.config();
 
@@ -11,8 +18,12 @@ export function getConnection(
 	commitment: "confirmed" | "finalized" = "finalized",
 ) {
 	const network = cluster ? cluster : "mainnet-beta";
-	const RPC_URL = network === "devnet" ? process.env.DEVNET_RPC_URL : process.env.RPC_URL;
-	assert(RPC_URL && RPC_URL !== "", `missing env var: ${network === "devnet" ? "DEVNET_RPC_URL" : "RPC_URL"}`);
+	const RPC_URL =
+		network === "devnet" ? process.env.DEVNET_RPC_URL : process.env.RPC_URL;
+	assert(
+		RPC_URL && RPC_URL !== "",
+		`missing env var: ${network === "devnet" ? "DEVNET_RPC_URL" : "RPC_URL"}`,
+	);
 
 	return new Connection(RPC_URL, commitment);
 }
@@ -23,7 +34,9 @@ export async function sleep(ms: number) {
 
 export function getWallets(cluster?: Cluster) {
 	const SECRET_KEYS =
-		cluster && cluster === "mainnet-beta" ? process.env.MAINNET_SECRET_KEYS : process.env.DEVNET_SECRET_KEYS;
+		cluster && cluster === "mainnet-beta"
+			? process.env.MAINNET_SECRET_KEYS
+			: process.env.DEVNET_SECRET_KEYS;
 
 	assert(
 		SECRET_KEYS && SECRET_KEYS != "",
@@ -38,7 +51,10 @@ export function getWallets(cluster?: Cluster) {
 
 		for (const keys of secretKeys) {
 			// console.log("secret key", keys);
-			assert(keys && typeof keys === "string" && keys != "", "Invalid secret key");
+			assert(
+				keys && typeof keys === "string" && keys != "",
+				"Invalid secret key",
+			);
 
 			const keypair = Keypair.fromSecretKey(utils.bytes.bs58.decode(keys));
 			// console.log(Buffer.from(keypair.secretKey).toJSON());
@@ -63,7 +79,9 @@ export function nowInSec() {
 }
 
 export function getSignTransaction(provider: AnchorProvider) {
-	const signTransaction = <T extends Transaction | VersionedTransaction>(tx: T): Promise<T> => {
+	const signTransaction = <T extends Transaction | VersionedTransaction>(
+		tx: T,
+	): Promise<T> => {
 		return provider.wallet.signTransaction(tx);
 	};
 
@@ -87,7 +105,12 @@ export function chunkArray<T>(arr: T[], size: number): T[][] {
 	return result;
 }
 
-export async function getBlockTime(connection: Connection, commitment: Commitment) {
-	const time = await connection.getBlockTime(await connection.getSlot(commitment));
+export async function getBlockTime(
+	connection: Connection,
+	commitment: Commitment,
+) {
+	const time = await connection.getBlockTime(
+		await connection.getSlot(commitment),
+	);
 	return time!;
 }

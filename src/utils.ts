@@ -20,12 +20,21 @@ export async function callWithEnhancedBackoff<T>(
 		} catch (error: any) {
 			if (attempt === maxRetries) throw error;
 
-			let delay = Math.min(baseDelay * Math.pow(backoffFactor, attempt), maxDelay);
+			let delay = Math.min(
+				baseDelay * Math.pow(backoffFactor, attempt),
+				maxDelay,
+			);
 
 			// Handle 429 specifically with longer delays
-			if (error?.status === 429 || error?.code === 429 || error?.message?.includes("429")) {
+			if (
+				error?.status === 429 ||
+				error?.code === 429 ||
+				error?.message?.includes("429")
+			) {
 				delay = Math.min(delay * backoffFactor, maxDelay); // Double delay for rate limits
-				console.warn(`Rate limit hit, waiting ${delay}ms before retry ${attempt + 1}/${maxRetries}`);
+				console.warn(
+					`Rate limit hit, waiting ${delay}ms before retry ${attempt + 1}/${maxRetries}`,
+				);
 			}
 
 			// Add jitter to prevent thundering herd

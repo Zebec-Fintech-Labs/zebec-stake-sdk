@@ -5,7 +5,11 @@ import { RateLimitedQueue } from "../../src";
 
 // Test utilities
 // Test utilities
-function createMockTask(id: number, duration: number = 100, shouldFail: boolean = false) {
+function createMockTask(
+	id: number,
+	duration: number = 100,
+	shouldFail: boolean = false,
+) {
 	return async (): Promise<string> => {
 		await new Promise((resolve) => setTimeout(resolve, duration));
 
@@ -17,7 +21,9 @@ function createMockTask(id: number, duration: number = 100, shouldFail: boolean 
 	};
 }
 
-async function measureExecutionTime<T>(fn: () => Promise<T>): Promise<{ result: T; duration: number }> {
+async function measureExecutionTime<T>(
+	fn: () => Promise<T>,
+): Promise<{ result: T; duration: number }> {
 	const startTime = Date.now();
 	const result = await fn();
 	const duration = Date.now() - startTime;
@@ -51,11 +57,19 @@ describe("RateLimitedQueue", function () {
 
 		it("should process multiple tasks successfully", async function () {
 			const queue = new RateLimitedQueue(2, 100);
-			const tasks = [1, 2, 3, 4, 5].map((i) => queue.add(createMockTask(i, 100)));
+			const tasks = [1, 2, 3, 4, 5].map((i) =>
+				queue.add(createMockTask(i, 100)),
+			);
 
 			const results = await Promise.all(tasks);
 
-			assert.deepStrictEqual(results, ["Result 1", "Result 2", "Result 3", "Result 4", "Result 5"]);
+			assert.deepStrictEqual(results, [
+				"Result 1",
+				"Result 2",
+				"Result 3",
+				"Result 4",
+				"Result 5",
+			]);
 			assert.strictEqual(queue.getQueueLength(), 0);
 			assert.strictEqual(queue.getRunningCount(), 0);
 		});
@@ -71,7 +85,10 @@ describe("RateLimitedQueue", function () {
 			const tasks = Array.from({ length: 6 }, (_, i) =>
 				queue.add(async () => {
 					currentConcurrent++;
-					maxObservedConcurrent = Math.max(maxObservedConcurrent, currentConcurrent);
+					maxObservedConcurrent = Math.max(
+						maxObservedConcurrent,
+						currentConcurrent,
+					);
 
 					// Verify we never exceed the limit during execution
 					assert(
@@ -92,7 +109,10 @@ describe("RateLimitedQueue", function () {
 				maxObservedConcurrent <= maxConcurrent,
 				`Max observed concurrent (${maxObservedConcurrent}) should not exceed limit (${maxConcurrent})`,
 			);
-			assert(maxObservedConcurrent > 0, "Should have observed some concurrent execution");
+			assert(
+				maxObservedConcurrent > 0,
+				"Should have observed some concurrent execution",
+			);
 		});
 
 		it("should queue tasks when at capacity", async function () {
@@ -106,8 +126,16 @@ describe("RateLimitedQueue", function () {
 			// Give a small delay for the first task to start
 			await new Promise((resolve) => setTimeout(resolve, 10));
 
-			assert.strictEqual(queue.getRunningCount(), 1, "Should have 1 task running");
-			assert.strictEqual(queue.getQueueLength(), 1, "Should have 1 task queued");
+			assert.strictEqual(
+				queue.getRunningCount(),
+				1,
+				"Should have 1 task running",
+			);
+			assert.strictEqual(
+				queue.getQueueLength(),
+				1,
+				"Should have 1 task queued",
+			);
 
 			await Promise.all([task1Promise, task2Promise]);
 		});
@@ -157,7 +185,10 @@ describe("RateLimitedQueue", function () {
 
 			// Total time should be approximately: 50 + (minDelay + 100) + 50 = minDelay + 200
 			// We allow some tolerance for execution overhead
-			assert(totalTime < minDelay + 300, `Total execution time (${totalTime}ms) suggests unnecessary delay was added`);
+			assert(
+				totalTime < minDelay + 300,
+				`Total execution time (${totalTime}ms) suggests unnecessary delay was added`,
+			);
 		});
 	});
 
@@ -219,23 +250,31 @@ describe("RateLimitedQueue", function () {
 			const taskDuration = 100;
 
 			// Sequential execution
-			const { duration: sequentialTime } = await measureExecutionTime(async () => {
-				const results: string[] = [];
-				for (let i = 1; i <= taskCount; i++) {
-					const result = await createMockTask(i, taskDuration)();
-					results.push(result);
-				}
-				return results;
-			});
+			const { duration: sequentialTime } = await measureExecutionTime(
+				async () => {
+					const results: string[] = [];
+					for (let i = 1; i <= taskCount; i++) {
+						const result = await createMockTask(i, taskDuration)();
+						results.push(result);
+					}
+					return results;
+				},
+			);
 
 			// Parallel execution with queue
-			const { duration: parallelTime } = await measureExecutionTime(async () => {
-				const queue = new RateLimitedQueue(3, 50);
-				const tasks = Array.from({ length: taskCount }, (_, i) => queue.add(createMockTask(i + 1, taskDuration)));
-				return await Promise.all(tasks);
-			});
+			const { duration: parallelTime } = await measureExecutionTime(
+				async () => {
+					const queue = new RateLimitedQueue(3, 50);
+					const tasks = Array.from({ length: taskCount }, (_, i) =>
+						queue.add(createMockTask(i + 1, taskDuration)),
+					);
+					return await Promise.all(tasks);
+				},
+			);
 
-			console.log(`Sequential: ${sequentialTime}ms, Parallel: ${parallelTime}ms`);
+			console.log(
+				`Sequential: ${sequentialTime}ms, Parallel: ${parallelTime}ms`,
+			);
 
 			// Parallel should be significantly faster (allow for some overhead)
 			assert(
@@ -251,15 +290,21 @@ describe("RateLimitedQueue", function () {
 			// Rate limited execution
 			const { duration: limitedTime } = await measureExecutionTime(async () => {
 				const queue = new RateLimitedQueue(2, 100);
-				const tasks = Array.from({ length: taskCount }, (_, i) => queue.add(createMockTask(i + 1, taskDuration)));
+				const tasks = Array.from({ length: taskCount }, (_, i) =>
+					queue.add(createMockTask(i + 1, taskDuration)),
+				);
 				return await Promise.all(tasks);
 			});
 
 			// Unlimited parallel execution
-			const { duration: unlimitedTime } = await measureExecutionTime(async () => {
-				const tasks = Array.from({ length: taskCount }, (_, i) => createMockTask(i + 1, taskDuration)());
-				return await Promise.all(tasks);
-			});
+			const { duration: unlimitedTime } = await measureExecutionTime(
+				async () => {
+					const tasks = Array.from({ length: taskCount }, (_, i) =>
+						createMockTask(i + 1, taskDuration)(),
+					);
+					return await Promise.all(tasks);
+				},
+			);
 
 			console.log(`Limited: ${limitedTime}ms, Unlimited: ${unlimitedTime}ms`);
 
@@ -304,7 +349,9 @@ describe("RateLimitedQueue", function () {
 			const taskCount = 10;
 
 			// Add many tasks rapidly
-			const tasks = Array.from({ length: taskCount }, (_, i) => queue.add(createMockTask(i + 1, 50)));
+			const tasks = Array.from({ length: taskCount }, (_, i) =>
+				queue.add(createMockTask(i + 1, 50)),
+			);
 
 			// Should have 1 running and 9 queued (or close to it due to timing)
 			await new Promise((resolve) => setTimeout(resolve, 10));
@@ -312,7 +359,10 @@ describe("RateLimitedQueue", function () {
 			const running = queue.getRunningCount();
 			const queued = queue.getQueueLength();
 
-			assert(running <= 1, `Running count (${running}) should not exceed limit`);
+			assert(
+				running <= 1,
+				`Running count (${running}) should not exceed limit`,
+			);
 			assert(running + queued >= taskCount - 2, "Most tasks should be tracked"); // Allow for timing variations
 
 			await Promise.all(tasks);

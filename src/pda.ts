@@ -1,4 +1,4 @@
-import { Address, BN, translateAddress, utils } from "@coral-xyz/anchor";
+import { type Address, BN, translateAddress, utils } from "@coral-xyz/anchor";
 import { PublicKey } from "@solana/web3.js";
 
 import { ZEBEC_STAKE_PROGRAM } from "./constants";
@@ -27,7 +27,10 @@ export function deriveStakeAddress(
 	return stakeAddress;
 }
 
-export function deriveLockupAddress(name: string, programId: Address = ZEBEC_STAKE_PROGRAM.mainnet) {
+export function deriveLockupAddress(
+	name: string,
+	programId: Address = ZEBEC_STAKE_PROGRAM.mainnet,
+) {
 	const [lockupAddress] = PublicKey.findProgramAddressSync(
 		[utils.bytes.utf8.encode(SEEDS.lockup), utils.bytes.utf8.encode(name)],
 		translateAddress(programId),
@@ -49,18 +52,30 @@ export function deriveUserNonceAddress(
 	return userNonceAddress;
 }
 
-export function deriveStakeVaultAddress(lockup: Address, programId: Address = ZEBEC_STAKE_PROGRAM.mainnet) {
+export function deriveStakeVaultAddress(
+	lockup: Address,
+	programId: Address = ZEBEC_STAKE_PROGRAM.mainnet,
+) {
 	const [stakeVault] = PublicKey.findProgramAddressSync(
-		[utils.bytes.utf8.encode(SEEDS.stakeVault), translateAddress(lockup).toBuffer()],
+		[
+			utils.bytes.utf8.encode(SEEDS.stakeVault),
+			translateAddress(lockup).toBuffer(),
+		],
 		translateAddress(programId),
 	);
 
 	return stakeVault;
 }
 
-export function deriveRewardVaultAddress(lockup: Address, programId: Address = ZEBEC_STAKE_PROGRAM.mainnet) {
+export function deriveRewardVaultAddress(
+	lockup: Address,
+	programId: Address = ZEBEC_STAKE_PROGRAM.mainnet,
+) {
 	const [rewardVault] = PublicKey.findProgramAddressSync(
-		[utils.bytes.utf8.encode(SEEDS.rewardVault), translateAddress(lockup).toBuffer()],
+		[
+			utils.bytes.utf8.encode(SEEDS.rewardVault),
+			translateAddress(lockup).toBuffer(),
+		],
 		translateAddress(programId),
 	);
 
