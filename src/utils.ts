@@ -20,10 +20,7 @@ export async function callWithEnhancedBackoff<T>(
 		} catch (error: any) {
 			if (attempt === maxRetries) throw error;
 
-			let delay = Math.min(
-				baseDelay * Math.pow(backoffFactor, attempt),
-				maxDelay,
-			);
+			let delay = Math.min(baseDelay * backoffFactor ** attempt, maxDelay);
 
 			// Handle 429 specifically with longer delays
 			if (

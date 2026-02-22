@@ -36,6 +36,18 @@ import {
 } from "./pda";
 import { createReadonlyProvider, type ReadonlyProvider } from "./providers";
 import { RateLimitedQueue } from "./rateLimitQueue";
+import type {
+	InitLockupInstructionData,
+	LockupInfo,
+	Numeric,
+	ParsedRewardScheme,
+	RewardScheme,
+	StakeInfo,
+	StakeInfoWithHash,
+	StakeInstructionData,
+	UpdateLockupInstructionData,
+	UserNonceInfo,
+} from "./types";
 import { callWithEnhancedBackoff, chunkArray } from "./utils";
 
 type ProgramCreateFunction = (
@@ -465,7 +477,7 @@ export class StakeService {
 		);
 
 		if (!lockupAccount) {
-			throw new Error("Lockup account does not exists for address: " + lockup);
+			throw new Error(`Lockup account does not exists for address: ${lockup}`);
 		}
 
 		const lockPeriods = lockupAccount.stakeInfo.durationMap.map((item) =>
@@ -473,8 +485,7 @@ export class StakeService {
 		);
 		if (!lockPeriods.includes(params.lockPeriod)) {
 			throw new Error(
-				"Invalid lockperiod. Available options are: " +
-					lockPeriods.map((l) => l.toString()).concat(", "),
+				`Invalid lockperiod. Available options are: ${lockPeriods.map((l) => l.toString()).join(", ")}`,
 			);
 		}
 
@@ -973,78 +984,3 @@ export class StakeService {
 		return this.provider.connection;
 	}
 }
-
-export type InitLockupInstructionData = {
-	rewardSchemes: ParsedRewardScheme[];
-	fee: BN;
-	feeVault: PublicKey;
-	name: string;
-	minimumStake: BN;
-};
-
-export type UpdateLockupInstructionData = {
-	rewardSchemes: ParsedRewardScheme[];
-	fee: BN;
-	feeVault: PublicKey;
-	minimumStake: BN;
-};
-
-export type ParsedRewardScheme = {
-	duration: BN;
-	reward: BN;
-};
-
-type Numeric = string | number;
-
-export type RewardScheme = {
-	duration: number;
-	rewardRate: Numeric;
-};
-
-export type StakeInstructionData = {
-	amount: BN;
-	lockPeriod: BN;
-	nonce: BN;
-};
-
-export type LockupInfo = {
-	address: string;
-	feeInfo: {
-		fee: string;
-		feeVault: string;
-	};
-	rewardToken: {
-		tokenAddress: string;
-	};
-	stakeToken: {
-		tokenAdress: string;
-		totalStaked: string;
-	};
-	stakeInfo: {
-		name: string;
-		creator: string;
-		rewardSchemes: RewardScheme[];
-		minimumStake: string;
-	};
-};
-
-export type StakeInfo = {
-	address: string;
-	nonce: bigint;
-	createdTime: number;
-	stakedAmount: string;
-	rewardAmount: string;
-	stakeClaimed: boolean;
-	lockPeriod: number;
-	staker: string;
-	lockup: string;
-};
-
-export type UserNonceInfo = {
-	address: string;
-	nonce: bigint;
-};
-
-export type StakeInfoWithHash = StakeInfo & {
-	hash: string;
-};
