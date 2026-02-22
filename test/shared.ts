@@ -1,15 +1,14 @@
-import assert from "assert";
-import dotenv from "dotenv";
-
-import { AnchorProvider, utils, Wallet } from "@coral-xyz/anchor";
+import assert from "node:assert";
+import { type AnchorProvider, utils, Wallet } from "@coral-xyz/anchor";
 import {
-	Cluster,
-	Commitment,
+	type Cluster,
+	type Commitment,
 	Connection,
 	Keypair,
-	Transaction,
-	VersionedTransaction,
+	type Transaction,
+	type VersionedTransaction,
 } from "@solana/web3.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -39,7 +38,7 @@ export function getWallets(cluster?: Cluster) {
 			: process.env.DEVNET_SECRET_KEYS;
 
 	assert(
-		SECRET_KEYS && SECRET_KEYS != "",
+		SECRET_KEYS && SECRET_KEYS !== "",
 		`missing env var: ${cluster === "mainnet-beta" ? "MAINNET_SECRET_KEYS" : "DEVNET_SECRET_KEYS"}`,
 	);
 
@@ -52,7 +51,7 @@ export function getWallets(cluster?: Cluster) {
 		for (const keys of secretKeys) {
 			// console.log("secret key", keys);
 			assert(
-				keys && typeof keys === "string" && keys != "",
+				keys && typeof keys === "string" && keys !== "",
 				"Invalid secret key",
 			);
 
@@ -61,8 +60,12 @@ export function getWallets(cluster?: Cluster) {
 
 			keypairs.push(keypair);
 		}
-	} catch (err: any) {
-		throw new Error("Some error occured parsing secret key: " + err.message);
+	} catch (err: unknown) {
+		if (err instanceof Error) {
+			throw new Error(`Some error occured parsing secret key: ${err.message}`);
+		} else {
+			throw new Error("Some error occured parsing secret key");
+		}
 	}
 
 	const wallets: Wallet[] = [];

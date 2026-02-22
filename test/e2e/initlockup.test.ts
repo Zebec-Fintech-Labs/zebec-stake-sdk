@@ -3,7 +3,7 @@ import assert from "assert";
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
-	RewardScheme,
+	type RewardScheme,
 	StakeServiceBuilder,
 } from "../../src";
 import { getConnection, getWallets } from "../shared";

@@ -1,12 +1,15 @@
-import assert from "assert";
+import assert from 'assert';
 
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
-	RewardScheme,
+	type RewardScheme,
 	StakeServiceBuilder,
-} from "../../src";
-import { getConnection, getWallets } from "../shared";
+} from '../../src';
+import {
+	getConnection,
+	getWallets,
+} from '../shared';
 
 describe("Update Lockup", () => {
 	const network = "devnet";
@@ -25,7 +28,7 @@ describe("Update Lockup", () => {
 		.build();
 
 	describe("update lockup()", () => {
-		let lockupName: string = "Lockup_004";
+		const lockupName: string = "Lockup_004";
 
 		// before(async () => {
 		// 	lockupName = `Lockup_${Date.now()}`;
@@ -67,7 +70,7 @@ describe("Update Lockup", () => {
 		// 	console.log("signature:", signature);
 		// });
 
-		it.only("update staking lock", async () => {
+		it("update staking lock", async () => {
 			const fee = 5;
 			const feeVault = "CfMZHY1yJzKudnDvroLWCHHNuDTncN7xwJhpRdLijoiv";
 			const rewardSchemes: RewardScheme[] = [
@@ -176,7 +179,7 @@ describe("Update Lockup", () => {
 			];
 			const minimumStake = 0.000001;
 
-			let error: any = null;
+			let error: unknown = null;
 
 			try {
 				const payload = await serviveB.updateLockup({

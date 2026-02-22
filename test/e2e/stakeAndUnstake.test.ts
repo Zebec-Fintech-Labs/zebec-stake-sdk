@@ -1,15 +1,14 @@
-import assert from "assert";
-import { BigNumber } from "bignumber.js";
-
+import assert from "node:assert";
 import { PublicKey } from "@solana/web3.js";
 import { getMintDecimals } from "@zebec-network/solana-common";
+import { BigNumber } from "bignumber.js";
 
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
 	deriveStakeAddress,
 	deriveUserNonceAddress,
-	RewardScheme,
+	type RewardScheme,
 	StakeServiceBuilder,
 } from "../../src";
 import { getBlockTime, getConnection, getWallets, sleep } from "../shared";
@@ -20,7 +19,7 @@ function calculateReward(
 	amount: string | number,
 	rewardTokenDecimals: number,
 ) {
-	const scheme = rewardScheme.find((scheme) => scheme.duration == lockTime);
+	const scheme = rewardScheme.find((scheme) => scheme.duration === lockTime);
 	assert(scheme, `No scheme exists for lockTime: ${lockTime}`);
 	const annualRewardRate = BigNumber(scheme.rewardRate.toString()).div(100);
 	const rewardAmount = BigNumber(amount)

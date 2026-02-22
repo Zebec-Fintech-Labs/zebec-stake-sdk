@@ -1,22 +1,21 @@
-import assert from "assert";
-import { BigNumber } from "bignumber.js";
-import { BN } from "bn.js";
-import * as fs from "fs";
-import path from "path";
-
+import assert from "node:assert";
+import * as fs from "node:fs";
+import path from "node:path";
 import { Program } from "@coral-xyz/anchor";
 import {
 	PublicKey,
 	TransactionMessage,
 	VersionedTransaction,
 } from "@solana/web3.js";
+import { BigNumber } from "bignumber.js";
+import { BN } from "bn.js";
 
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
 	deriveStakeAddress,
 	ZEBEC_STAKE_IDL_V1,
-	ZebecStakeIdlV1,
+	type ZebecStakeIdlV1,
 } from "../src";
 import { chunkArray, getConnection, getWallets } from "./shared";
 
@@ -97,7 +96,7 @@ describe("Whitelisting Stakers", () => {
 					stakesMap.set(datum.wallet, []);
 				}
 
-				stakesMap.get(datum.wallet)!.push(stakeInfo as StakeInfo);
+				stakesMap.get(datum.wallet)?.push(stakeInfo as StakeInfo);
 			}
 
 			// Sort stakes by creation time for each wallet and assign nonces

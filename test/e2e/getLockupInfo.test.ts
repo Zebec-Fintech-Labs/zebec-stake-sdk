@@ -1,14 +1,21 @@
-import { PublicKey } from "@solana/web3.js";
-import { getAssociatedTokenAddressSync } from "@zebec-network/solana-common";
-import assert from "assert";
+import assert from 'node:assert';
 
-import { createReadonlyProvider, StakeServiceBuilder } from "../../src";
+import { PublicKey } from '@solana/web3.js';
+import { getAssociatedTokenAddressSync } from '@zebec-network/solana-common';
+
+import {
+	createReadonlyProvider,
+	StakeServiceBuilder,
+} from '../../src';
 import {
 	deriveLockupAddress,
 	deriveRewardVaultAddress,
 	deriveStakeVaultAddress,
-} from "../../src/pda";
-import { getConnection, getWallets } from "../shared";
+} from '../../src/pda';
+import {
+	getConnection,
+	getWallets,
+} from '../shared';
 
 describe("Fetch Lockup Info", () => {
 	const network = "mainnet-beta";
