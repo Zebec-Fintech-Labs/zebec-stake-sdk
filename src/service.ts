@@ -364,9 +364,7 @@ export class StakeService {
 		const rewardVault = deriveRewardVaultAddress(lockup, this.programId);
 		const stakeVault = deriveStakeVaultAddress(lockup, this.programId);
 
-		const fee = new BN(
-			BigNumber(params.fee).times(UNITS_PER_STAKE_TOKEN).toFixed(0),
-		);
+		const fee = new BN(percentToBps(params.fee));
 		const minimumStake = new BN(
 			BigNumber(params.minimumStake).times(UNITS_PER_STAKE_TOKEN).toFixed(0),
 		);
@@ -421,9 +419,7 @@ export class StakeService {
 		);
 		const UNITS_PER_STAKE_TOKEN = TEN_BIGNUM.pow(stakeTokenDecimals);
 
-		const fee = new BN(
-			BigNumber(params.fee).times(UNITS_PER_STAKE_TOKEN).toFixed(0),
-		);
+		const fee = new BN(percentToBps(params.fee));
 		const minimumStake = new BN(
 			BigNumber(params.minimumStake).times(UNITS_PER_STAKE_TOKEN).toFixed(0),
 		);
@@ -566,7 +562,7 @@ export class StakeService {
 		);
 
 		if (!lockupAccount) {
-			throw new Error("Lockup account does not exists for address: " + lockup);
+			throw new Error(`Lockup account does not exists for address: ${lockup}`);
 		}
 
 		const stakeToken = lockupAccount.stakedToken.tokenAddress;
@@ -627,9 +623,7 @@ export class StakeService {
 		return {
 			address: lockupAddress.toString(),
 			feeInfo: {
-				fee: BigNumber(lockupAccount.feeInfo.fee.toString())
-					.div(UNITS_PER_STAKE_TOKEN)
-					.toFixed(),
+				fee: bpsToPercent(lockupAccount.feeInfo.fee.toString()),
 				feeVault: lockupAccount.feeInfo.feeVault.toString(),
 			},
 			rewardToken: {
@@ -668,7 +662,7 @@ export class StakeService {
 
 		if (!lockupAccount) {
 			throw new Error(
-				"Lockup account does not exists for address: " + lockupAddress,
+				`Lockup account does not exists for address: ${lockupAddress}`,
 			);
 		}
 
@@ -746,7 +740,7 @@ export class StakeService {
 
 		if (!lockupAccount) {
 			throw new Error(
-				"Lockup account does not exists for address: " + lockupAddress,
+				`Lockup account does not exists for address: ${lockupAddress}`,
 			);
 		}
 
@@ -912,7 +906,7 @@ export class StakeService {
 
 		if (!lockupAccount) {
 			throw new Error(
-				"Lockup account does not exists for address: " + lockupAddress,
+				`Lockup account does not exists for address: ${lockupAddress}`,
 			);
 		}
 
