@@ -1,12 +1,15 @@
-import assert from "assert";
+import assert from 'assert';
 
 import {
 	createAnchorProvider,
 	deriveLockupAddress,
 	type RewardScheme,
 	StakeServiceBuilder,
-} from "../../src";
-import { getConnection, getWallets } from "../shared";
+} from '../../src';
+import {
+	getConnection,
+	getWallets,
+} from '../shared';
 
 describe("Update Lockup", () => {
 	const network = "devnet";
@@ -68,8 +71,8 @@ describe("Update Lockup", () => {
 		// });
 
 		it("update staking lock", async () => {
-			const fee = 5;
-			const feeVault = "CfMZHY1yJzKudnDvroLWCHHNuDTncN7xwJhpRdLijoiv";
+			const fee = 0.00;
+			const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
 			const rewardSchemes: RewardScheme[] = [
 				{
 					// duration: 2592000, // 30 days
@@ -82,9 +85,9 @@ describe("Update Lockup", () => {
 					rewardRate: "50.00",
 				},
 				{
-					// duration: 10368000, // 120 days
+					// duration: 15552000, // 180 days
 					duration: 180,
-					rewardRate: "100.00",
+					rewardRate: "70.00",
 				},
 			];
 			const minimumStake = 0.000001;
@@ -161,17 +164,17 @@ describe("Update Lockup", () => {
 				{
 					// duration: 2592000, // 30 days
 					duration: 30,
-					rewardRate: "5.00",
+					rewardRate: "3.00",
 				},
 				{
 					// duration: 7776000, // 90 days
 					duration: 90,
-					rewardRate: "10.00",
+					rewardRate: "5.00",
 				},
 				{
-					// duration: 10368000, // 120 days
-					duration: 120,
-					rewardRate: "12.00",
+					// duration: 15552000, // 180 days
+					duration: 180,
+					rewardRate: "7.00",
 				},
 			];
 			const minimumStake = 0.000001;

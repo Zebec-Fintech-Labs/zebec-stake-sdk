@@ -9,7 +9,7 @@ import {
 import { getConnection, getWallets } from "../shared";
 
 describe("Init Lockup", () => {
-	const network = "devnet";
+	const network = "mainnet-beta";
 	const connection = getConnection(network, "confirmed");
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
@@ -26,10 +26,10 @@ describe("Init Lockup", () => {
 
 	describe("initLock()", () => {
 		it("initialize staking lock", async () => {
-			const rewardToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
-			const stakeToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
+			// const rewardToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
+			// const stakeToken = "De31sBPcDejCVpZZh1fq8SNs7AcuWcBKuU3k2jqnkmKc";
 			// const fee = 0;
-			const feeVault = "AA8B8zv68QCT8pkJL9vd6nAG9MzopARH9xvY1CLgAQQQ";
+			// const feeVault = "AA8B8zv68QCT8pkJL9vd6nAG9MzopARH9xvY1CLgAQQQ";
 			// const name = `Lockup_003`;
 			// const rewardSchemes: RewardScheme[] = [
 			// 	{
@@ -51,22 +51,25 @@ describe("Init Lockup", () => {
 			// const minimumStake = 0.000001;
 
 			/** mainnet-beta */
-			// const rewardToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU"; // ZBCN Token
-			// const stakeToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
+			const rewardToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU"; // ZBCN Token
+			const stakeToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
 			const fee = 0;
-			// const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
-			const name = `Lockup_004`;
+			const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
+			const name = `ZBCN_Lockup_UAT_001`;
 			const rewardSchemes: RewardScheme[] = [
 				{
-					duration: 2592000, // 30 days
+					// duration: 2592000, // 30 days
+					duration: 30,
 					rewardRate: "3.00",
 				},
 				{
-					duration: 7776000, // 90 days
+					// duration: 7776000, // 90 days
+					duration: 90,
 					rewardRate: "5.00",
 				},
 				{
-					duration: 15552000, // 180 days
+					// duration: 15552000, // 180 days
+					duration: 180,
 					rewardRate: "7.00",
 				},
 			];

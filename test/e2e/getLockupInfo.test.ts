@@ -12,7 +12,7 @@ import {
 import { getConnection, getWallets } from "../shared";
 
 describe("Fetch Lockup Info", () => {
-	const network = "mainnet-beta";
+	const network = "devnet";
 	const connection = getConnection(network);
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
@@ -27,9 +27,10 @@ describe("Fetch Lockup Info", () => {
 
 	describe("getLockupInfo()", () => {
 		it("fetch lockup information", async () => {
-			const lockupName = "ZBCN_Lockup_003";
+			// const lockupName = "ZBCN_Lockup_003";
+			// const lockupName = "ZBCN_Lockup_UAT_001"; // mainnet-beta | uat
 			// const lockupName = "ZBCN_Lockup_002";
-			// const lockupName = "Lockup_004"; // devnet
+			const lockupName = "Lockup_004"; // devnet
 			const lockup = deriveLockupAddress(lockupName, service.program.programId);
 			console.log("lockup address:", lockup.toString());
 
