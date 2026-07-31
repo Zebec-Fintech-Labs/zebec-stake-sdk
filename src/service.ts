@@ -220,12 +220,14 @@ export class StakeService {
 	}
 
 	async getInitLockupInstruction(
-		creator: PublicKey,
-		lockup: PublicKey,
-		stakeToken: PublicKey,
-		rewardToken: PublicKey,
-		rewardVault: PublicKey,
-		stakeVault: PublicKey,
+		accounts: {
+			creator: PublicKey;
+			lockup: PublicKey;
+			stakeToken: PublicKey;
+			rewardToken: PublicKey;
+			rewardVault: PublicKey;
+			stakeVault: PublicKey;
+		},
 		data: InitLockupInstructionData,
 	): Promise<TransactionInstruction> {
 		return this.program.methods
@@ -237,19 +239,21 @@ export class StakeService {
 				minimumStake: data.minimumStake,
 			})
 			.accountsPartial({
-				creator,
-				lockup,
-				rewardToken,
-				rewardVault,
-				stakeToken,
-				stakeVault,
+				creator: accounts.creator,
+				lockup: accounts.lockup,
+				rewardToken: accounts.rewardToken,
+				rewardVault: accounts.rewardVault,
+				stakeToken: accounts.stakeToken,
+				stakeVault: accounts.stakeVault,
 			})
 			.instruction();
 	}
 
 	async getUpdateLockupInstruction(
-		updater: PublicKey,
-		lockup: PublicKey,
+		accounts: {
+			updater: PublicKey;
+			lockup: PublicKey;
+		},
 		data: UpdateLockupInstructionData,
 	): Promise<TransactionInstruction> {
 		return this.program.methods
@@ -260,64 +264,78 @@ export class StakeService {
 				minimumStake: data.minimumStake,
 			})
 			.accountsPartial({
-				updater,
-				lockup,
+				updater: accounts.updater,
+				lockup: accounts.lockup,
 			})
 			.instruction();
 	}
 
 	async getStakeInstruction(
-		feePayer: PublicKey,
-		lockup: PublicKey,
-		stakeToken: PublicKey,
-		stakeVault: PublicKey,
-		staker: PublicKey,
-		userNonce: PublicKey,
-		stakePda: PublicKey,
-		stakeVaultTokenAccount: PublicKey,
+		accounts: {
+			feePayer: PublicKey;
+			lockup: PublicKey;
+			stakeToken: PublicKey;
+			stakeVault: PublicKey;
+			staker: PublicKey;
+			userNonce: PublicKey;
+			stakePda: PublicKey;
+			stakeVaultTokenAccount: PublicKey;
+			stakerTokenAccount: PublicKey;
+		},
 		data: StakeInstructionData,
 	): Promise<TransactionInstruction> {
 		return this.program.methods
 			.stakeZbcn(data)
 			.accountsPartial({
-				stakeToken,
-				feePayer,
-				staker,
-				lockup,
-				stakeVault,
-				userNonce,
-				stakePda,
-				stakeVaultTokenAccount,
+				stakeToken: accounts.stakeToken,
+				feePayer: accounts.feePayer,
+				staker: accounts.staker,
+				lockup: accounts.lockup,
+				stakeVault: accounts.stakeVault,
+				userNonce: accounts.userNonce,
+				stakePda: accounts.stakePda,
+				stakeVaultTokenAccount: accounts.stakeVaultTokenAccount,
+				stakerTokenAccount: accounts.stakerTokenAccount,
 			})
 			.instruction();
 	}
 
 	async getUnstakeInstruction(
-		feePayer: PublicKey,
-		feeVault: PublicKey,
-		lockup: PublicKey,
-		stakePda: PublicKey,
-		rewardToken: PublicKey,
-		rewardVault: PublicKey,
-		stakeToken: PublicKey,
-		stakeVault: PublicKey,
-		staker: PublicKey,
-		stakerTokenAccount: PublicKey,
-		nonce: BN,
+		accounts: {
+			feePayer: PublicKey;
+			feeVault: PublicKey;
+			lockup: PublicKey;
+			stakePda: PublicKey;
+			rewardToken: PublicKey;
+			rewardVault: PublicKey;
+			stakeToken: PublicKey;
+			stakeVault: PublicKey;
+			staker: PublicKey;
+			stakerTokenAccount: PublicKey;
+			feeVaultTokenAccount: PublicKey;
+			rewardVaultTokenAccount: PublicKey;
+			stakerRewardTokenAccount: PublicKey;
+			stakeVaultTokenAccount: PublicKey;
+		},
+		data: { nonce: BN },
 	): Promise<TransactionInstruction> {
 		return this.program.methods
-			.unstakeZbcn(nonce)
+			.unstakeZbcn(data.nonce)
 			.accountsPartial({
-				feePayer,
-				feeVault,
-				rewardToken,
-				stakeToken,
-				staker,
-				lockup,
-				stakeVault,
-				stakePda,
-				rewardVault,
-				stakerTokenAccount,
+				feePayer: accounts.feePayer,
+				feeVault: accounts.feeVault,
+				rewardToken: accounts.rewardToken,
+				stakeToken: accounts.stakeToken,
+				staker: accounts.staker,
+				lockup: accounts.lockup,
+				stakeVault: accounts.stakeVault,
+				stakePda: accounts.stakePda,
+				rewardVault: accounts.rewardVault,
+				stakerTokenAccount: accounts.stakerTokenAccount,
+				feeVaultTokenAccount: accounts.feeVaultTokenAccount,
+				rewardVaultTokenAccount: accounts.rewardVaultTokenAccount,
+				stakerRewardTokenAccount: accounts.stakerRewardTokenAccount,
+				stakeVaultTokenAccount: accounts.stakeVaultTokenAccount,
 			})
 			.instruction();
 	}
@@ -369,12 +387,14 @@ export class StakeService {
 		);
 
 		const instruction = await this.getInitLockupInstruction(
-			creator,
-			lockup,
-			stakeToken,
-			rewardToken,
-			rewardVault,
-			stakeVault,
+			{
+				creator: creator,
+				lockup: lockup,
+				stakeToken: stakeToken,
+				rewardToken: rewardToken,
+				rewardVault: rewardVault,
+				stakeVault: stakeVault,
+			},
 			{
 				fee,
 				feeVault: feeVault,
@@ -432,12 +452,15 @@ export class StakeService {
 			},
 		);
 
-		const instruction = await this.getUpdateLockupInstruction(updater, lockup, {
-			fee,
-			feeVault,
-			minimumStake,
-			rewardSchemes,
-		});
+		const instruction = await this.getUpdateLockupInstruction(
+			{ updater, lockup },
+			{
+				fee,
+				feeVault,
+				minimumStake,
+				rewardSchemes,
+			},
+		);
 
 		return this._createPayload(updater, [instruction]);
 	}
@@ -504,6 +527,11 @@ export class StakeService {
 			stakeVault,
 			true,
 		);
+		const stakerTokenAccount = getAssociatedTokenAddressSync(
+			stakeToken,
+			staker,
+			true,
+		);
 
 		const stakeTokenDecimals = await getMintDecimals(
 			this.connection,
@@ -513,14 +541,17 @@ export class StakeService {
 		const UNITS_PER_STAKE_TOKEN = TEN_BIGNUM.pow(stakeTokenDecimals);
 
 		const instruction = await this.getStakeInstruction(
-			feePayer,
-			lockup,
-			stakeToken,
-			stakeVault,
-			staker,
-			userNonce,
-			stakePda,
-			stakeVaultTokenAccount,
+			{
+				feePayer,
+				lockup,
+				stakeToken,
+				stakeVault,
+				staker,
+				userNonce,
+				stakePda,
+				stakeVaultTokenAccount,
+				stakerTokenAccount,
+			},
 			{
 				amount: new BN(
 					BigNumber(params.amount).times(UNITS_PER_STAKE_TOKEN).toFixed(0),
@@ -582,19 +613,47 @@ export class StakeService {
 			staker,
 			true,
 		);
-
-		const instruction = await this.getUnstakeInstruction(
-			feePayer,
+		const feeVaultTokenAccount = getAssociatedTokenAddressSync(
+			stakeToken,
 			feeVault,
-			lockup,
-			stakePda,
-			rewardToken,
+			true,
+		);
+		const rewardVaultTokenAccount = getAssociatedTokenAddressSync(
+			stakeToken,
 			rewardVault,
+			true,
+		);
+		const stakerRewardTokenAccount = getAssociatedTokenAddressSync(
+			rewardToken,
+			staker,
+			true,
+		);
+		const stakeVaultTokenAccount = getAssociatedTokenAddressSync(
 			stakeToken,
 			stakeVault,
-			staker,
-			stakerTokenAccount,
-			new BN(params.nonce.toString()),
+			true,
+		);
+
+		const instruction = await this.getUnstakeInstruction(
+			{
+				feePayer,
+				feeVault,
+				lockup,
+				stakePda,
+				rewardToken,
+				rewardVault,
+				stakeToken,
+				stakeVault,
+				staker,
+				stakerTokenAccount,
+				feeVaultTokenAccount,
+				rewardVaultTokenAccount,
+				stakerRewardTokenAccount,
+				stakeVaultTokenAccount,
+			},
+			{
+				nonce: new BN(params.nonce.toString()),
+			},
 		);
 
 		return this._createPayload(feePayer, [instruction]);
