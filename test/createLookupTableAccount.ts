@@ -47,7 +47,7 @@ describe("lookup table actions", () => {
 		});
 	});
 
-	it.skip("extends address lookup table", async () => {
+	it("extends address lookup table", async () => {
 		// const lookupTable = new web3.PublicKey("HCD4FqdYayUzUPSxSswPiEo4r7rPwd8KSvf3tqYB91SL");
 		// const lookupTable = new PublicKey("C4R2sL6yj7bzKfbdfwCfH68DZZ3QnzdmedE9wQqTfAAA"); // devnet
 		const lookupTable = new PublicKey(
@@ -95,11 +95,19 @@ describe("lookup table actions", () => {
 			// new PublicKey("2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD"), // fee vault
 			// new PublicKey("5CYqp1B3yxGSYKzUwEMESBYF2brzhSKJsqZGcum7vojb"), // fee vault ata
 
-			new PublicKey("6ucsPuczmg9uoq5i4SYDEEJ4ciKnuxW3za2sdBcKHwmw"), // lockup address for ZBCN_Lockup_003
-			new PublicKey("HJqK7re4GDSm4roQQS2iSLt5p7Gyb9MHBy9dHJw9obUp"), // stake vault
-			new PublicKey("3DC8cdCNKEZPapuPHTtkuw8XgbDtYarJojjpGgtF65Vo"), // stake vault ata
-			new PublicKey("FqtZSfVX986itJuFqdt1SmNqMSQc9MgCjijXZJ2aSCiG"), // reward vault
-			new PublicKey("ErF9raeVUf1H7EgSDuApS1NYhBkAcnnVas9zmEK23sTE"), // reward vault ata
+			// addresses for ZBCN_Lockup_003
+			// new PublicKey("6ucsPuczmg9uoq5i4SYDEEJ4ciKnuxW3za2sdBcKHwmw"), // lockup address for ZBCN_Lockup_003
+			// new PublicKey("HJqK7re4GDSm4roQQS2iSLt5p7Gyb9MHBy9dHJw9obUp"), // stake vault
+			// new PublicKey("3DC8cdCNKEZPapuPHTtkuw8XgbDtYarJojjpGgtF65Vo"), // stake vault ata
+			// new PublicKey("FqtZSfVX986itJuFqdt1SmNqMSQc9MgCjijXZJ2aSCiG"), // reward vault
+			// new PublicKey("ErF9raeVUf1H7EgSDuApS1NYhBkAcnnVas9zmEK23sTE"), // reward vault ata
+
+			// addresses for ZBCN Lockup
+			new PublicKey("AYbW5cbZEUgLEj6Eiy3yg74PU3YbEHkbFxgW6fjbSJjp"),
+			new PublicKey("DWwty3vnpMWsJagibYWPNmJ2BGELHow4vKm5nK79btoC"),
+			new PublicKey("7oKEHLFXbya57ZixovrDStQCxWpVJmisHszLSSiZXPdG"),
+			new PublicKey("7dvTVafoMm52sjyJCHkHZv119MecicqFCrgjq8RcLxJ6"),
+			new PublicKey("DGMT79t6tVGPHW8gLH29a6G1W8AnWhc5NzddvHiU9kCy"),
 		];
 
 		// Create an instruction to extend a lookup table with the provided addresses
@@ -135,12 +143,14 @@ describe("lookup table actions", () => {
 		);
 	});
 
-	it.only("list lookup table account addresses", async () => {
+	it("list lookup table account addresses", async () => {
 		const lookupTable = new PublicKey(
 			"EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t",
 		);
 
-		const lookupTables = await connection.getAddressLookupTable(lookupTable);
+		const lookupTables = await connection.getAddressLookupTable(lookupTable, {
+			commitment: "confirmed",
+		});
 		const lookupTableAccount = lookupTables.value!;
 		console.log("Lookup table address: [");
 		lookupTableAccount.state.addresses.map((a) =>
