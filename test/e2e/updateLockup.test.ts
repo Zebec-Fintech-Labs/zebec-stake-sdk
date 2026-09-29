@@ -10,11 +10,11 @@ import {
 import { getConnection, getWallets } from "../shared";
 
 describe("Update Lockup", () => {
-	const network = "devnet";
+	const network = "mainnet-beta";
 	const connection = getConnection(network, "confirmed");
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
-	console.log("\twallet:", wallet.publicKey.toString());
+	console.log("wallet:", wallet.publicKey.toString());
 	const provider = createAnchorProvider(connection, wallet, {
 		commitment: "confirmed",
 	});
@@ -26,7 +26,8 @@ describe("Update Lockup", () => {
 		.build();
 
 	describe("update lockup()", () => {
-		const lockupName: string = "Lockup_004";
+		// const lockupName: string = "Lockup_004";
+		const lockupName: string = "ZBCN_Lockup_005";
 
 		// before(async () => {
 		// 	lockupName = `Lockup_${Date.now()}`;
@@ -70,25 +71,25 @@ describe("Update Lockup", () => {
 
 		it("update staking lock", async () => {
 			const fee = 0.0;
-			const feeVault = "FLcSsn4xguvNYtnB7qSmh3yCPUcek6VBsfzWnhYSBAKT";
+			const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
 			const rewardSchemes: RewardScheme[] = [
 				{
-					// duration: 2592000, // 30 days
-					duration: 30,
-					rewardRate: "30.00",
+					duration: 2592000, // 30 days
+					// duration: 30,
+					rewardRate: "1.00",
 				},
 				{
-					// duration: 7776000, // 90 days
-					duration: 90,
-					rewardRate: "50.00",
+					duration: 7776000, // 90 days
+					// duration: 90,
+					rewardRate: "2.00",
 				},
 				{
-					// duration: 15552000, // 180 days
-					duration: 180,
-					rewardRate: "70.00",
+					duration: 15552000, // 180 days
+					// duration: 180,
+					rewardRate: "4.00",
 				},
 			];
-			const minimumStake = 0.000001;
+			const minimumStake = 1;
 
 			const payload = await service.updateLockup({
 				fee,

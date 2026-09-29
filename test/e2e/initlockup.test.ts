@@ -14,7 +14,8 @@ describe("Init Lockup", () => {
 	const connection = getConnection(network, "confirmed");
 	const wallets = getWallets(network);
 	const wallet = wallets[0];
-	console.log("\twallet:", wallet.publicKey.toString());
+	console.log("Wallet:", wallet.publicKey.toString());
+
 	const provider = createAnchorProvider(connection, wallet, {
 		commitment: "confirmed",
 	});
@@ -56,22 +57,22 @@ describe("Init Lockup", () => {
 			const stakeToken = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
 			const fee = 0;
 			const feeVault = "2Nz9xczcGaWvu5pZNzzXundLEdP5tf2aCAoWy4CGrjxD";
-			const name = `ZBCN_Lockup_UAT_001`;
+			const name = `ZBCN_Lockup_005`;
 			const rewardSchemes: RewardScheme[] = [
 				{
-					// duration: 2592000, // 30 days
-					duration: 30,
+					duration: 2592000, // 30 days
+					// duration: 30,
+					rewardRate: "1.00",
+				},
+				{
+					duration: 7776000, // 90 days
+					// duration: 90,
+					rewardRate: "2.00",
+				},
+				{
+					duration: 15552000, // 180 days
+					// duration: 180,
 					rewardRate: "3.00",
-				},
-				{
-					// duration: 7776000, // 90 days
-					duration: 90,
-					rewardRate: "5.00",
-				},
-				{
-					// duration: 15552000, // 180 days
-					duration: 180,
-					rewardRate: "7.00",
 				},
 			];
 			const minimumStake = 1;

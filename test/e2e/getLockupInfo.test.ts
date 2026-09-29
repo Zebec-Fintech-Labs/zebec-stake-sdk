@@ -27,8 +27,8 @@ describe("Fetch Lockup Info", () => {
 
 	describe("getLockupInfo()", () => {
 		it("fetch lockup information", async () => {
-			// const lockupName = "ZBCN_Lockup_003";
-			const lockupName = "ZBCN Lockup";
+			const lockupName = "ZBCN_Lockup_005";
+			// const lockupName = "ZBCN Lockup";
 			// const lockupName = "ZBCN_Lockup_UAT_001"; // mainnet-beta | uat
 			// const lockupName = "Lockup_004"; // devnet
 			const lockup = deriveLockupAddress(lockupName, service.program.programId);
