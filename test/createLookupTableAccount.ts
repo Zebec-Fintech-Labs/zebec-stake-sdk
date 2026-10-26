@@ -103,11 +103,18 @@ describe("lookup table actions", () => {
 			// new PublicKey("ErF9raeVUf1H7EgSDuApS1NYhBkAcnnVas9zmEK23sTE"), // reward vault ata
 
 			// addresses for ZBCN Lockup
-			new PublicKey("AYbW5cbZEUgLEj6Eiy3yg74PU3YbEHkbFxgW6fjbSJjp"),
-			new PublicKey("DWwty3vnpMWsJagibYWPNmJ2BGELHow4vKm5nK79btoC"),
-			new PublicKey("7oKEHLFXbya57ZixovrDStQCxWpVJmisHszLSSiZXPdG"),
-			new PublicKey("7dvTVafoMm52sjyJCHkHZv119MecicqFCrgjq8RcLxJ6"),
-			new PublicKey("DGMT79t6tVGPHW8gLH29a6G1W8AnWhc5NzddvHiU9kCy"),
+			// new PublicKey("AYbW5cbZEUgLEj6Eiy3yg74PU3YbEHkbFxgW6fjbSJjp"),
+			// new PublicKey("DWwty3vnpMWsJagibYWPNmJ2BGELHow4vKm5nK79btoC"),
+			// new PublicKey("7oKEHLFXbya57ZixovrDStQCxWpVJmisHszLSSiZXPdG"),
+			// new PublicKey("7dvTVafoMm52sjyJCHkHZv119MecicqFCrgjq8RcLxJ6"),
+			// new PublicKey("DGMT79t6tVGPHW8gLH29a6G1W8AnWhc5NzddvHiU9kCy"),
+
+			// address for ZBCN Lockup 005
+			new PublicKey("BkdevFCTJvSVXBhE8NEzPFpSFdTvn9pm4zVSsLvW9ZA"), // Lockup address for ZBCN_Lockup_005
+			new PublicKey("5Fe1JVUkaHVEAQ8sZ71xmQdyVahwfeuP4s9TGZ9mf8vk"), // stake vault
+			new PublicKey("5b9UpYukMnT28MVB8ZHgdPjLVQmMjDrz5v4a7JoHSBpZ"), // reward vault
+			new PublicKey("8bbygT4wHaR1vXQMCTK9uVnoDGBwWjNx9BUwjgLtkBvv"), // stake vault ata
+			new PublicKey("HCMkhsUvaaoYmkT8QGxS6a8BqvcobcpKtLWgNCxop9ZY"), // reward vault ata
 		];
 
 		// Create an instruction to extend a lookup table with the provided addresses
