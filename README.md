@@ -49,16 +49,22 @@ Use this setup for querying on-chain data without signing transactions.
 
 ```ts
 import { Connection } from "@solana/web3.js";
-import { createReadonlyProvider, StakeServiceBuilder } from "@zebec-network/zebec-stake-sdk";
+import {
+	createReadonlyProvider,
+	StakeServiceBuilder,
+} from "@zebec-network/zebec-stake-sdk";
 
-const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
+const connection = new Connection(
+	"https://api.mainnet-beta.solana.com",
+	"confirmed",
+);
 const provider = createReadonlyProvider(connection);
 
 const service = new StakeServiceBuilder()
-  .setNetwork("mainnet-beta")
-  .setProvider(provider)
-  .setProgram()
-  .build();
+	.setNetwork("mainnet-beta")
+	.setProvider(provider)
+	.setProgram()
+	.build();
 ```
 
 ### With wallet (for signing transactions)
@@ -69,21 +75,26 @@ Use this setup when you need to send transactions (stake, unstake, create/update
 import { Connection, Keypair } from "@solana/web3.js";
 import { Wallet } from "@coral-xyz/anchor";
 import {
-  createAnchorProvider,
-  StakeServiceBuilder,
+	createAnchorProvider,
+	StakeServiceBuilder,
 } from "@zebec-network/zebec-stake-sdk";
 
-const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
+const connection = new Connection(
+	"https://api.mainnet-beta.solana.com",
+	"confirmed",
+);
 const keypair = Keypair.fromSecretKey(/* your secret key bytes */);
 const wallet = new Wallet(keypair);
 
-const provider = createAnchorProvider(connection, wallet, { commitment: "confirmed" });
+const provider = createAnchorProvider(connection, wallet, {
+	commitment: "confirmed",
+});
 
 const service = new StakeServiceBuilder()
-  .setNetwork("mainnet-beta")
-  .setProvider(provider)
-  .setProgram()
-  .build();
+	.setNetwork("mainnet-beta")
+	.setProvider(provider)
+	.setProgram()
+	.build();
 ```
 
 ### Default setup (mainnet, no wallet)
@@ -95,10 +106,10 @@ import { StakeServiceBuilder } from "@zebec-network/zebec-stake-sdk";
 
 // Defaults: mainnet-beta network, ReadonlyProvider with public RPC
 const service = new StakeServiceBuilder()
-  .setNetwork()
-  .setProvider()
-  .setProgram()
-  .build();
+	.setNetwork()
+	.setProvider()
+	.setProgram()
+	.build();
 ```
 
 ---
@@ -111,19 +122,23 @@ A fluent builder for constructing a `StakeService`. Methods must be called in or
 
 ```ts
 class StakeServiceBuilder {
-  setNetwork(network?: "mainnet-beta" | "devnet"): StakeServiceBuilder
-  setProvider(provider?: ReadonlyProvider | AnchorProvider): StakeServiceBuilder
-  setProgram(createProgram?: (provider) => Program<ZebecStakeIdlV1>): StakeServiceBuilder
-  build(): StakeService
+	setNetwork(network?: "mainnet-beta" | "devnet"): StakeServiceBuilder;
+	setProvider(
+		provider?: ReadonlyProvider | AnchorProvider,
+	): StakeServiceBuilder;
+	setProgram(
+		createProgram?: (provider) => Program<ZebecStakeIdlV1>,
+	): StakeServiceBuilder;
+	build(): StakeService;
 }
 ```
 
-| Method | Description |
-| ------ | ----------- |
-| `setNetwork(network?)` | Set the target network. Defaults to `"mainnet-beta"`. Must be called before `setProvider`. |
-| `setProvider(provider?)` | Set the provider. Accepts `ReadonlyProvider` or `AnchorProvider`. Defaults to `ReadonlyProvider` using the public cluster RPC. Must be called before `setProgram`. |
-| `setProgram(createProgram?)` | Set the Anchor program. Optionally accepts a factory `(provider) => Program`. Defaults to the built-in IDL. |
-| `build()` | Validates all settings and returns a `StakeService` instance. Throws if any step was skipped. |
+| Method                       | Description                                                                                                                                                        |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `setNetwork(network?)`       | Set the target network. Defaults to `"mainnet-beta"`. Must be called before `setProvider`.                                                                         |
+| `setProvider(provider?)`     | Set the provider. Accepts `ReadonlyProvider` or `AnchorProvider`. Defaults to `ReadonlyProvider` using the public cluster RPC. Must be called before `setProgram`. |
+| `setProgram(createProgram?)` | Set the Anchor program. Optionally accepts a factory `(provider) => Program`. Defaults to the built-in IDL.                                                        |
+| `build()`                    | Validates all settings and returns a `StakeService` instance. Throws if any step was skipped.                                                                      |
 
 **Errors thrown by the builder:**
 
@@ -341,12 +356,12 @@ service.getUnstakeInstruction(
 
 #### Properties
 
-| Property | Type | Description |
-| -------- | ---- | ----------- |
-| `programId` | `PublicKey` | The deployed staking program's public key |
-| `connection` | `Connection` | The active Solana RPC connection |
-| `provider` | `Provider` | The underlying Anchor/Readonly provider |
-| `program` | `Program<ZebecStakeIdlV1>` | The Anchor program instance |
+| Property     | Type                       | Description                               |
+| ------------ | -------------------------- | ----------------------------------------- |
+| `programId`  | `PublicKey`                | The deployed staking program's public key |
+| `connection` | `Connection`               | The active Solana RPC connection          |
+| `provider`   | `Provider`                 | The underlying Anchor/Readonly provider   |
+| `program`    | `Program<ZebecStakeIdlV1>` | The Anchor program instance               |
 
 ---
 
@@ -374,7 +389,7 @@ Creates a full Anchor provider capable of signing and sending transactions.
 import { createAnchorProvider } from "@zebec-network/zebec-stake-sdk";
 
 const provider = createAnchorProvider(connection, wallet, {
-  commitment: "confirmed",
+	commitment: "confirmed",
 });
 ```
 
@@ -382,9 +397,13 @@ The `wallet` must implement the `AnchorWallet` interface:
 
 ```ts
 interface AnchorWallet {
-  publicKey: PublicKey;
-  signTransaction<T extends Transaction | VersionedTransaction>(tx: T): Promise<T>;
-  signAllTransactions<T extends Transaction | VersionedTransaction>(txs: T[]): Promise<T[]>;
+	publicKey: PublicKey;
+	signTransaction<T extends Transaction | VersionedTransaction>(
+		tx: T,
+	): Promise<T>;
+	signAllTransactions<T extends Transaction | VersionedTransaction>(
+		txs: T[],
+	): Promise<T[]>;
 }
 ```
 
@@ -396,21 +415,21 @@ Helper functions for deriving program-derived addresses. All `programId` paramet
 
 ```ts
 import {
-  deriveLockupAddress,
-  deriveStakeAddress,
-  deriveUserNonceAddress,
-  deriveStakeVaultAddress,
-  deriveRewardVaultAddress,
+	deriveLockupAddress,
+	deriveStakeAddress,
+	deriveUserNonceAddress,
+	deriveStakeVaultAddress,
+	deriveRewardVaultAddress,
 } from "@zebec-network/zebec-stake-sdk";
 ```
 
-| Function | Description |
-| -------- | ----------- |
-| `deriveLockupAddress(name, programId?)` | Derives the lockup PDA from its unique name |
-| `deriveStakeAddress(staker, lockup, nonce, programId?)` | Derives a stake PDA for a given staker, lockup, and nonce |
-| `deriveUserNonceAddress(user, lockup, programId?)` | Derives the user nonce PDA tracking a user's total stake count |
-| `deriveStakeVaultAddress(lockup, programId?)` | Derives the vault PDA that holds staked tokens |
-| `deriveRewardVaultAddress(lockup, programId?)` | Derives the vault PDA that holds reward tokens |
+| Function                                                | Description                                                    |
+| ------------------------------------------------------- | -------------------------------------------------------------- |
+| `deriveLockupAddress(name, programId?)`                 | Derives the lockup PDA from its unique name                    |
+| `deriveStakeAddress(staker, lockup, nonce, programId?)` | Derives a stake PDA for a given staker, lockup, and nonce      |
+| `deriveUserNonceAddress(user, lockup, programId?)`      | Derives the user nonce PDA tracking a user's total stake count |
+| `deriveStakeVaultAddress(lockup, programId?)`           | Derives the vault PDA that holds staked tokens                 |
+| `deriveRewardVaultAddress(lockup, programId?)`          | Derives the vault PDA that holds reward tokens                 |
 
 ---
 
@@ -419,60 +438,60 @@ import {
 ```ts
 // Human-readable reward scheme: duration in seconds and annual rate as a percentage
 type RewardScheme = {
-  duration: number;       // Lock period in seconds (e.g., 2592000 = 30 days)
-  rewardRate: Numeric;    // Annual reward rate as a percentage (e.g., "5.00" = 5%)
+	duration: number; // Lock period in seconds (e.g., 2592000 = 30 days)
+	rewardRate: Numeric; // Annual reward rate as a percentage (e.g., "5.00" = 5%)
 };
 
 // On-chain representation of a reward scheme (used with instruction builders)
 type ParsedRewardScheme = {
-  duration: BN;           // Lock period as a BN
-  reward: BN;             // Reward rate in basis points
+	duration: BN; // Lock period as a BN
+	reward: BN; // Reward rate in basis points
 };
 
 // Returned by getLockupInfo()
 type LockupInfo = {
-  address: string;
-  feeInfo: {
-    fee: string;           // Fee amount in token units
-    feeVault: string;      // Fee collector address
-  };
-  rewardToken: {
-    tokenAddress: string;
-  };
-  stakeToken: {
-    tokenAdress: string;   // Note: single 'd' in 'adress' (matches on-chain field)
-    totalStaked: string;   // Total tokens currently staked in this lockup
-  };
-  stakeInfo: {
-    name: string;
-    creator: string;
-    rewardSchemes: RewardScheme[];
-    minimumStake: string;
-  };
+	address: string;
+	feeInfo: {
+		fee: string; // Fee amount in token units
+		feeVault: string; // Fee collector address
+	};
+	rewardToken: {
+		tokenAddress: string;
+	};
+	stakeToken: {
+		tokenAdress: string; // Note: single 'd' in 'adress' (matches on-chain field)
+		totalStaked: string; // Total tokens currently staked in this lockup
+	};
+	stakeInfo: {
+		name: string;
+		creator: string;
+		rewardSchemes: RewardScheme[];
+		minimumStake: string;
+	};
 };
 
 // Returned by getStakeInfo() and getAllStakesInfo()
 type StakeInfo = {
-  address: string;         // Stake PDA address
-  nonce: bigint;           // Stake nonce (index within this user's stakes)
-  createdTime: number;     // Unix timestamp of when the stake was created
-  stakedAmount: string;    // Amount staked in token units
-  rewardAmount: string;    // Accrued reward in reward token units
-  stakeClaimed: boolean;   // Whether the stake has been unstaked
-  lockPeriod: number;      // Lock duration in seconds
-  staker: string;          // Staker's public key
-  lockup: string;          // Lockup PDA address
+	address: string; // Stake PDA address
+	nonce: bigint; // Stake nonce (index within this user's stakes)
+	createdTime: number; // Unix timestamp of when the stake was created
+	stakedAmount: string; // Amount staked in token units
+	rewardAmount: string; // Accrued reward in reward token units
+	stakeClaimed: boolean; // Whether the stake has been unstaked
+	lockPeriod: number; // Lock duration in seconds
+	staker: string; // Staker's public key
+	lockup: string; // Lockup PDA address
 };
 
 // Returned by getAllStakesInfoOfUser()
 type StakeInfoWithHash = StakeInfo & {
-  hash: string;            // Transaction signature of the original stake
+	hash: string; // Transaction signature of the original stake
 };
 
 // Returned by getUserNonceInfo()
 type UserNonceInfo = {
-  address: string;         // User nonce PDA address
-  nonce: bigint;           // Current nonce (equals total number of stakes made)
+	address: string; // User nonce PDA address
+	nonce: bigint; // Current nonce (equals total number of stakes made)
 };
 
 // Accepted wherever amounts are passed
@@ -480,26 +499,26 @@ type Numeric = string | number;
 
 // Data for getInitLockupInstruction()
 type InitLockupInstructionData = {
-  rewardSchemes: ParsedRewardScheme[];
-  fee: BN;
-  feeVault: PublicKey;
-  name: string;
-  minimumStake: BN;
+	rewardSchemes: ParsedRewardScheme[];
+	fee: BN;
+	feeVault: PublicKey;
+	name: string;
+	minimumStake: BN;
 };
 
 // Data for getUpdateLockupInstruction()
 type UpdateLockupInstructionData = {
-  rewardSchemes: ParsedRewardScheme[];
-  fee: BN;
-  feeVault: PublicKey;
-  minimumStake: BN;
+	rewardSchemes: ParsedRewardScheme[];
+	fee: BN;
+	feeVault: PublicKey;
+	minimumStake: BN;
 };
 
 // Data for getStakeInstruction()
 type StakeInstructionData = {
-  amount: BN;
-  lockPeriod: BN;
-  nonce: BN;
+	amount: BN;
+	lockPeriod: BN;
+	nonce: BN;
 };
 ```
 
@@ -508,15 +527,18 @@ type StakeInstructionData = {
 ### Constants
 
 ```ts
-import { ZEBEC_STAKE_PROGRAM, STAKE_LOOKUP_TABLE_ADDRESS } from "@zebec-network/zebec-stake-sdk";
+import {
+	ZEBEC_STAKE_PROGRAM,
+	STAKE_LOOKUP_TABLE_ADDRESS,
+} from "@zebec-network/zebec-stake-sdk";
 
 // Program IDs
-ZEBEC_STAKE_PROGRAM.mainnet  // "zSTKzGLiN6T6EVzhBiL6sjULXMahDavAS2p4R62afGv"
-ZEBEC_STAKE_PROGRAM.devnet   // "zSTKzGLiN6T6EVzhBiL6sjULXMahDavAS2p4R62afGv"
+ZEBEC_STAKE_PROGRAM.mainnet; // "zSTKzGLiN6T6EVzhBiL6sjULXMahDavAS2p4R62afGv"
+ZEBEC_STAKE_PROGRAM.devnet; // "zSTKzGLiN6T6EVzhBiL6sjULXMahDavAS2p4R62afGv"
 
 // Address Lookup Table accounts for versioned transactions
-STAKE_LOOKUP_TABLE_ADDRESS["mainnet-beta"]  // "EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t"
-STAKE_LOOKUP_TABLE_ADDRESS["devnet"]        // "C4R2sL6yj7bzKfbdfwCfH68DZZ3QnzdmedE9wQqTfAAA"
+STAKE_LOOKUP_TABLE_ADDRESS["mainnet-beta"]; // "EoKjJejKr4XsBdtUuYwzZcYd6tpGNijxCGgQocxtxQ8t"
+STAKE_LOOKUP_TABLE_ADDRESS["devnet"]; // "C4R2sL6yj7bzKfbdfwCfH68DZZ3QnzdmedE9wQqTfAAA"
 ```
 
 ---
@@ -528,18 +550,18 @@ A utility class for rate-limiting concurrent async operations. Used internally b
 ```ts
 import { RateLimitedQueue } from "@zebec-network/zebec-stake-sdk";
 
-const queue = new RateLimitedQueue(maxConcurrent = 3, minDelayMs = 200);
+const queue = new RateLimitedQueue((maxConcurrent = 3), (minDelayMs = 200));
 
 const result = await queue.add(async () => {
-  // Your async operation
-  return await fetchSomething();
+	// Your async operation
+	return await fetchSomething();
 });
 ```
 
-| Parameter | Default | Description |
-| --------- | ------- | ----------- |
-| `maxConcurrent` | `3` | Maximum number of concurrent operations |
-| `minDelayMs` | `200` | Minimum delay in milliseconds between requests |
+| Parameter       | Default | Description                                    |
+| --------------- | ------- | ---------------------------------------------- |
+| `maxConcurrent` | `3`     | Maximum number of concurrent operations        |
+| `minDelayMs`    | `200`   | Minimum delay in milliseconds between requests |
 
 ---
 
@@ -550,20 +572,23 @@ const result = await queue.add(async () => {
 ```ts
 import { Connection } from "@solana/web3.js";
 import {
-  createReadonlyProvider,
-  deriveLockupAddress,
-  deriveUserNonceAddress,
-  StakeServiceBuilder,
+	createReadonlyProvider,
+	deriveLockupAddress,
+	deriveUserNonceAddress,
+	StakeServiceBuilder,
 } from "@zebec-network/zebec-stake-sdk";
 
-const connection = new Connection("https://api.mainnet-beta.solana.com", "confirmed");
+const connection = new Connection(
+	"https://api.mainnet-beta.solana.com",
+	"confirmed",
+);
 const provider = createReadonlyProvider(connection);
 
 const service = new StakeServiceBuilder()
-  .setNetwork("mainnet-beta")
-  .setProvider(provider)
-  .setProgram()
-  .build();
+	.setNetwork("mainnet-beta")
+	.setProvider(provider)
+	.setProgram()
+	.build();
 
 // Derive the lockup address from its name
 const lockupName = "ZBCN_Lockup_003";
@@ -605,36 +630,38 @@ Requires an `AnchorProvider` (wallet with signing capability).
 import { Connection, Keypair } from "@solana/web3.js";
 import { Wallet } from "@coral-xyz/anchor";
 import {
-  createAnchorProvider,
-  deriveLockupAddress,
-  StakeServiceBuilder,
+	createAnchorProvider,
+	deriveLockupAddress,
+	StakeServiceBuilder,
 } from "@zebec-network/zebec-stake-sdk";
 
 const connection = new Connection("https://api.devnet.solana.com", "confirmed");
 const keypair = Keypair.fromSecretKey(/* your secret key bytes */);
 const wallet = new Wallet(keypair);
-const provider = createAnchorProvider(connection, wallet, { commitment: "confirmed" });
+const provider = createAnchorProvider(connection, wallet, {
+	commitment: "confirmed",
+});
 
 const service = new StakeServiceBuilder()
-  .setNetwork("devnet")
-  .setProvider(provider)
-  .setProgram()
-  .build();
+	.setNetwork("devnet")
+	.setProvider(provider)
+	.setProgram()
+	.build();
 
 const ZBCN_MINT = "ZBCNpuD7YMXzTHB2fhGkGi78MNsHGLRXUhRewNRm9RU";
 
 const payload = await service.initLockup({
-  stakeToken: ZBCN_MINT,
-  rewardToken: ZBCN_MINT,
-  name: "My_Lockup_001",
-  fee: 0,                        // 0 token fee per stake
-  feeVault: "FeeVaultPublicKey...",
-  minimumStake: 1,               // Minimum 1 token to stake
-  rewardSchemes: [
-    { duration: 2592000, rewardRate: "3.00" },  // 30 days @ 3% APR
-    { duration: 7776000, rewardRate: "5.00" },  // 90 days @ 5% APR
-    { duration: 15552000, rewardRate: "7.00" }, // 180 days @ 7% APR
-  ],
+	stakeToken: ZBCN_MINT,
+	rewardToken: ZBCN_MINT,
+	name: "My_Lockup_001",
+	fee: 0, // 0 token fee per stake
+	feeVault: "FeeVaultPublicKey...",
+	minimumStake: 1, // Minimum 1 token to stake
+	rewardSchemes: [
+		{ duration: 2592000, rewardRate: "3.00" }, // 30 days @ 3% APR
+		{ duration: 7776000, rewardRate: "5.00" }, // 90 days @ 5% APR
+		{ duration: 15552000, rewardRate: "7.00" }, // 180 days @ 7% APR
+	],
 });
 
 const signature = await payload.execute({ commitment: "confirmed" });
@@ -651,15 +678,15 @@ Only the original creator can update a lockup.
 
 ```ts
 const payload = await service.updateLockup({
-  lockupName: "My_Lockup_001",
-  fee: 5,
-  feeVault: "NewFeeVaultPublicKey...",
-  minimumStake: 10,
-  rewardSchemes: [
-    { duration: 2592000, rewardRate: "5.00" },  // 30 days @ 5% APR
-    { duration: 7776000, rewardRate: "8.00" },  // 90 days @ 8% APR
-    { duration: 15552000, rewardRate: "12.00" }, // 180 days @ 12% APR
-  ],
+	lockupName: "My_Lockup_001",
+	fee: 5,
+	feeVault: "NewFeeVaultPublicKey...",
+	minimumStake: 10,
+	rewardSchemes: [
+		{ duration: 2592000, rewardRate: "5.00" }, // 30 days @ 5% APR
+		{ duration: 7776000, rewardRate: "8.00" }, // 90 days @ 8% APR
+		{ duration: 15552000, rewardRate: "12.00" }, // 180 days @ 12% APR
+	],
 });
 
 const signature = await payload.execute({ commitment: "confirmed" });
@@ -670,8 +697,8 @@ console.log("Lockup updated:", signature);
 
 ```ts
 import {
-  deriveUserNonceAddress,
-  deriveLockupAddress,
+	deriveUserNonceAddress,
+	deriveLockupAddress,
 } from "@zebec-network/zebec-stake-sdk";
 
 const lockupName = "My_Lockup_001";
@@ -679,19 +706,19 @@ const lockupAddress = deriveLockupAddress(lockupName, service.programId);
 
 // Get the user's current nonce (determines the next stake account address)
 const userNonceAddress = deriveUserNonceAddress(
-  wallet.publicKey,
-  lockupAddress,
-  service.programId,
+	wallet.publicKey,
+	lockupAddress,
+	service.programId,
 );
 const nonceInfo = await service.getUserNonceInfo(userNonceAddress);
 const nonce = nonceInfo ? nonceInfo.nonce : 0n;
 
 // Stake 1000 tokens for 30 days (2592000 seconds)
 const payload = await service.stake({
-  lockupName,
-  amount: 1000,
-  lockPeriod: 2592000, // must match a duration in the lockup's rewardSchemes
-  nonce,               // current nonce; incremented on-chain after staking
+	lockupName,
+	amount: 1000,
+	lockPeriod: 2592000, // must match a duration in the lockup's rewardSchemes
+	nonce, // current nonce; incremented on-chain after staking
 });
 
 const signature = await payload.execute({ commitment: "confirmed" });
@@ -709,8 +736,8 @@ import { deriveStakeAddress } from "@zebec-network/zebec-stake-sdk";
 const stakeNonce = 0n;
 
 const payload = await service.unstake({
-  lockupName: "My_Lockup_001",
-  nonce: stakeNonce,
+	lockupName: "My_Lockup_001",
+	nonce: stakeNonce,
 });
 
 const signature = await payload.execute({ commitment: "confirmed" });
@@ -719,10 +746,10 @@ console.log("Unstake signature:", signature);
 // Verify the stake was claimed
 const lockupAddress = deriveLockupAddress("My_Lockup_001", service.programId);
 const stakeAddress = deriveStakeAddress(
-  wallet.publicKey,
-  lockupAddress,
-  stakeNonce,
-  service.programId,
+	wallet.publicKey,
+	lockupAddress,
+	stakeNonce,
+	service.programId,
 );
 const stakeInfo = await service.getStakeInfo(stakeAddress, lockupAddress);
 console.log("Stake claimed:", stakeInfo?.stakeClaimed); // true
@@ -734,31 +761,31 @@ console.log("Reward received:", stakeInfo?.rewardAmount);
 ```ts
 // All stakes for a specific user in a lockup
 const userStakes = await service.getAllStakesInfoOfUser(
-  wallet.publicKey,
-  lockupAddress,
-  {
-    maxConcurrent: 3,  // max parallel RPC calls (default: 3)
-    minDelayMs: 400,   // ms between requests to avoid rate limits (default: 400)
-  }
+	wallet.publicKey,
+	lockupAddress,
+	{
+		maxConcurrent: 3, // max parallel RPC calls (default: 3)
+		minDelayMs: 400, // ms between requests to avoid rate limits (default: 400)
+	},
 );
 
 for (const stake of userStakes) {
-  console.log({
-    nonce: stake.nonce.toString(),
-    amount: stake.stakedAmount,
-    reward: stake.rewardAmount,
-    claimed: stake.stakeClaimed,
-    lockPeriod: stake.lockPeriod,
-    txHash: stake.hash,
-  });
+	console.log({
+		nonce: stake.nonce.toString(),
+		amount: stake.stakedAmount,
+		reward: stake.rewardAmount,
+		claimed: stake.stakeClaimed,
+		lockPeriod: stake.lockPeriod,
+		txHash: stake.hash,
+	});
 }
 
 // Single stake by address
 const stakeAddress = deriveStakeAddress(
-  wallet.publicKey,
-  lockupAddress,
-  0n,
-  service.programId,
+	wallet.publicKey,
+	lockupAddress,
+	0n,
+	service.programId,
 );
 const stakeInfo = await service.getStakeInfo(stakeAddress, lockupAddress);
 ```
