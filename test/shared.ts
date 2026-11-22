@@ -44,12 +44,11 @@ export function getWallets(cluster?: Cluster) {
 
 	const keypairs: Keypair[] = [];
 	try {
-		const secretKeys = JSON.parse(SECRET_KEYS);
-
-		assert(Array.isArray(secretKeys), "Invalid format for SECRET_KEYS");
+		const secretKeys = SECRET_KEYS.split(",")
+			.map((keys) => keys.trim())
+			.filter(Boolean);
 
 		for (const keys of secretKeys) {
-			// console.log("secret key", keys);
 			assert(
 				keys && typeof keys === "string" && keys !== "",
 				"Invalid secret key",
